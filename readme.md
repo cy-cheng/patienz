@@ -7,6 +7,7 @@ This is the repository for Virtual Patient project for YTP 2024-2025.
 3. Begin development
 
 Note: remember to add your `GOOGLE_API_KEY` to your environment variables.
+
 (You can do this by adding `export GOOGLE_API_KEY=<your_key>` to your `.bashrc` or `.zshrc` file)
 
 ## Testing the application
