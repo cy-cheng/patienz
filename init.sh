@@ -1,16 +1,14 @@
-#!/bin/bash
+#!/bin/zsh
 
-# Change to the project directory
+echo Initializing virtual environment...
 python -m venv venv
 
-# Activate the virtual environment
+echo Activating virtual environment...
+
 source venv/bin/activate
 
-echo installing requirements
+echo Installing required packages...
 # Install the required packages
-pip install -r requirements.txt > /dev/null
+pip install -q -r requirements.txt
 
-echo installation complete.
-
-# Print the current working directory to confirm
-pwd
+echo Installation complete.
