@@ -6,14 +6,24 @@ from google.ai.generativelanguage_v1beta.types import content
 # Configure the API key
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
-# Create the model configuration
-generation_config = {
+# Create the model configurations
+generation_config = { # for the problem setter and patient
     "temperature": 1,
     "top_p": 0.95,
     "top_k": 40,
     "max_output_tokens": 8192,
     "response_mime_type": "text/plain",
 }
+
+grader_config = {
+    "temperature": 0.5,
+    "top_p": 0.95,
+    "top_k": 40,
+    "max_output_tokens": 8192,
+    
+}
+
+
 
 if "problem_setter_model" not in st.session_state:
     # Read the system instruction from the file
