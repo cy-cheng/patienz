@@ -77,6 +77,8 @@ with button_container:
         
         # Send the chat history to the grader model
         grader_response = st.session_state.grader.send_message(chat_history)
+
+        # print(grader_response.text)
         
         # Display grader response in chat message container with different profile picture color
         with st.chat_message("grader"):

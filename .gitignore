@@ -1,4 +1,6 @@
 venv/
 test.*
 test/
+TODO.txt
+__pycache__/
 
