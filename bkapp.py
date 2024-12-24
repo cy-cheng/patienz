@@ -1,25 +1,63 @@
+from typing import type_check_only
 import streamlit as st
-from models.problem_setter import create_problem_setter_model
-from models.patient import create_patient_model
-from models.grader import create_grader_model
+import os
+import google.generativeai as genai
+from google.ai.generativelanguage_v1beta.types import content
 
-# Configure instruction file paths
-PROBLEM_SETTER_INSTRUCTION = "instruction_files/problem_setter_instruction.txt"
-PATIENT_INSTRUCTION = "instruction_files/patient_instruction.txt"
-GRADER_INSTRUCTION = "instruction_files/grader_instruction.txt"
+# Configure the API key
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
-# Initialize models in session state
+# Create the model configurations
+generation_config = { # for the problem setter and patient
+    "temperature": 1,
+    "top_p": 0.95,
+    "top_k": 40,
+    "max_output_tokens": 8192,
+    "response_mime_type": "text/plain",
+}
+
+grader_config = {
+    "temperature": 1,
+    "top_p": 0.95,
+    "top_k": 40,
+    "max_output_tokens": 8192,
+    "response_schema": content.Schema(
+        type=content.Type.OBJECT,
+        properties={
+            "item": content.Schema(type=content.Type.STRING),
+            "full_score": content.Schema(type=content.Type.NUMBER),
+            "real_socre": content.Schema(type=content.Type.NUMBER),
+            "feedback": content.Schema(type=content.Type.STRING),
+        },
+    ),
+    "response_mime_type" : "application/json",
+}
+
 if "problem_setter_model" not in st.session_state:
-    problem_setter_model = create_problem_setter_model(PROBLEM_SETTER_INSTRUCTION)
-    st.session_state.problem_setter_model = problem_setter_model
+    # Read the system instruction from the file
+    with open('instruction_files/problem_setter_instruction.txt', 'r', encoding='utf-8') as file:
+        problem_setter_instruction = file.read()
+
+    st.session_state.problem_setter_model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        generation_config=generation_config,
+        system_instruction=problem_setter_instruction,
+    )
     st.session_state.problem_setter = st.session_state.problem_setter_model.start_chat()
     st.session_state.problem = (st.session_state.problem_setter.send_message("請開始出題")).text
 
     print(st.session_state.problem)
 
 if "patient_model" not in st.session_state:
-    patient_model = create_patient_model(PATIENT_INSTRUCTION, st.session_state.problem)
-    st.session_state.patient_model = patient_model
+    # Read the patient instruction from the file
+    with open('instruction_files/patient_instruction.txt', 'r', encoding='utf-8') as file:
+        patient_instruction = file.read()
+
+    st.session_state.patient_model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash",
+        generation_config=generation_config,
+        system_instruction=f"{patient_instruction}{st.session_state.problem}",
+    )
     st.session_state.patient = st.session_state.patient_model.start_chat()
 
 # Initialize chat history
@@ -68,8 +106,15 @@ with button_container:
     if st.button("完成問診"):
         # Initialize the grader model and chat
         if "grader_model" not in st.session_state:
-            grader_model = create_grader_model(GRADER_INSTRUCTION)
-            st.session_state.grader_model = grader_model
+            # Read the system instruction from the file
+            with open('instruction_files/grader_instruction.txt', 'r', encoding='utf-8') as file:
+                grader_instruction = file.read()
+
+            st.session_state.grader_model = genai.GenerativeModel(
+                model_name="gemini-1.5-flash",
+                generation_config=generation_config,
+                system_instruction=grader_instruction,
+            )
             st.session_state.grader = st.session_state.grader_model.start_chat()
         
         # Prepare the chat history for the grader model
@@ -86,5 +131,4 @@ with button_container:
         
         # Mark the diagnostic session as ended
         st.session_state.diagnostic_ended = True
-
 
