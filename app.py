@@ -3,6 +3,8 @@ from models.problem_setter import create_problem_setter_model
 from models.patient import create_patient_model
 from models.grader import create_grader_model
 
+import json
+
 # Configure instruction file paths
 PROBLEM_SETTER_INSTRUCTION = "instruction_files/problem_setter_instruction.txt"
 PATIENT_INSTRUCTION = "instruction_files/patient_instruction.txt"
@@ -78,8 +80,12 @@ with button_container:
         # Send the chat history to the grader model
         grader_response = st.session_state.grader.send_message(chat_history)
 
-        # print(grader_response.text)
-        
+        # print(grader_response)
+
+        # Convert grader_response.text to JSON
+        grader_response_json = json.loads(grader_response.text)
+        print(grader_response_json)
+
         # Display grader response in chat message container with different profile picture color
         with st.chat_message("grader"):
             st.markdown(grader_response.text)
