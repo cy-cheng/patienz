@@ -13,6 +13,15 @@ def create_grader_model(grader_instruction_path: str):
         "top_p": 0.95,
         "top_k": 40,
         "max_output_tokens": 8192,
+        "response_mime_type": "text/plain",
+    }
+
+    """
+    generation_config = {
+        "temperature": 1,
+        "top_p": 0.95,
+        "top_k": 40,
+        "max_output_tokens": 8192,
         "response_schema": content.Schema(
             type=content.Type.ARRAY,
             items=content.Schema( 
@@ -20,21 +29,12 @@ def create_grader_model(grader_instruction_path: str):
                 properties={
                     "item": content.Schema(type=content.Type.STRING),
                     "full_score": content.Schema(type=content.Type.INTEGER),
-                    "real_socre": content.Schema(type=content.Type.INTEGER),
+                    "real_score": content.Schema(type=content.Type.INTEGER),
                     "feedback": content.Schema(type=content.Type.STRING),
                 },
             )
         ),
         "response_mime_type": "application/json",
-    }
-    
-    """
-    generation_config = {
-        "temperature": 1,
-        "top_p": 0.95,
-        "top_k": 40,
-        "max_output_tokens": 8192,
-        "response_mime_type": "text/plain",
     }
     """
 
