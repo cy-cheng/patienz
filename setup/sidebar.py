@@ -4,7 +4,7 @@ def patient_info():
     with st.sidebar:
         st.header("病患資料設定")
 
-    col1, col2 = sidebar.columns(2)
+    col1, col2 = st.sidebar.columns(2)
 
     with col1:
         age = st.slider("年齡", 0, 100, 45)

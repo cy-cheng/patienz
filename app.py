@@ -6,9 +6,9 @@ import setup.sidebar
 import json
 
 # Configure instruction file paths
-PROBLEM_SETTER_INSTRUCTION = "instruction_files/problem_setter_instruction.txt"
-PATIENT_INSTRUCTION = "instruction_files/patient_instruction.txt"
-GRADER_INSTRUCTION = "instruction_files/grader_instruction.txt"
+PROBLEM_SETTER_INSTRUCTION = "instruction_file/problem_setter_instruction.txt"
+PATIENT_INSTRUCTION = "instruction_file/patient_instruction.txt"
+GRADER_INSTRUCTION = "instruction_file/grader_instruction.txt"
 
 
 # Initialize models in session state
