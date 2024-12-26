@@ -16,20 +16,22 @@ if "problem_setter_model" not in st.session_state:
     problem_setter_model = create_problem_setter_model(PROBLEM_SETTER_INSTRUCTION)
     st.session_state.problem_setter_model = problem_setter_model
     st.session_state.problem_setter = st.session_state.problem_setter_model.start_chat()
-    st.session_state.problem = (st.session_state.problem_setter.send_message("請開始出題")).text
 
-    print(st.session_state.problem)
-
-if "patient_model" not in st.session_state:
+if "patient_model" not in st.session_state and "problem" in st.session_state:
     patient_model = create_patient_model(PATIENT_INSTRUCTION, st.session_state.problem)
     st.session_state.patient_model = patient_model
     st.session_state.patient = st.session_state.patient_model.start_chat()
 
-
 # sidebar 
-
 setup.sidebar.patient_info()
 setup.sidebar.note()
+
+if "user_config" in st.session_state and "problem" not in st.session_state:
+    config = "\n".join([f"{key}: {value}" for key, value in st.session_state.user_config.items()])
+    st.write(f"User Config:\n{config}")
+    st.session_state.problem = st.session_state.problem_setter.send_message("請利用以下資訊幫我出題：\n" + config).text
+
+    print(st.session_state.problem)
 
 # Create output message block
 
@@ -44,11 +46,33 @@ if "messages" not in st.session_state:
 
 chat_history_output = output_container.empty()
 
+# Define avatar map 
+avatar_map = {
+    "doctor": "🧑‍⚕️",
+    "patient": "😥",
+    "grader": "🧑‍🏫"
+}
+
+def move_focus():
+    # inspect the html to determine which control to specify to receive focus (e.g. text or textarea).
+    st.components.v1.html(
+        f"""
+            <script>
+                var textarea = window.parent.document.querySelectorAll("textarea[type=textarea]");
+                for (var i = 0; i < textarea.length; ++i) {{
+                    textarea[i].focus();
+                }}
+            </script>
+        """,
+    )
+
 def update_chat_history():
     with chat_history_output.container():
         for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
+            with st.chat_message(message["role"], avatar=avatar_map[message["role"]]):
                 st.markdown(message["content"])
+
+        move_focus()
 
 
 update_chat_history()
@@ -61,7 +85,7 @@ with input_container:
         chat_history = [{"role": msg["role"], "content": msg["content"]} for msg in st.session_state.messages]
 
         # Add user message to chat history
-        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state.messages.append({"role": "doctor", "content": prompt})
         update_chat_history()
         
         # Check if the diagnostic session has ended
@@ -75,7 +99,7 @@ with input_container:
             response = st.session_state.patient.send_message(f"醫生：{prompt}")
 
             # Add assistant response to chat history
-            st.session_state.messages.append({"role": "assistant", "content": response.text})
+            st.session_state.messages.append({"role": "patient", "content": response.text})
 
         update_chat_history()
 
@@ -109,6 +133,4 @@ with button_container:
         
         # Mark the diagnostic session as ended
         st.session_state.diagnostic_ended = True
-
-
 
