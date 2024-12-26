@@ -15,7 +15,6 @@ def create_grader_model(grader_instruction_path: str):
         "max_output_tokens": 8192,
         "response_mime_type": "text/plain",
     }
-
     """
     generation_config = {
         "temperature": 1,

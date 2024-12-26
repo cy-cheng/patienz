@@ -8,7 +8,7 @@ import json
 # Configure instruction file paths
 PROBLEM_SETTER_INSTRUCTION = "instruction_file/problem_setter_instruction.txt"
 PATIENT_INSTRUCTION = "instruction_file/patient_instruction.txt"
-GRADER_INSTRUCTION = "instruction_file/grader_instruction.txt"
+GRADER_INSTRUCTION = "instruction_file/grader_inst_gpt.txt"
 
 
 # Initialize models in session state
@@ -117,13 +117,13 @@ with button_container:
         chat_history = "\n".join([f"{msg['role']}：{msg['content']}" for msg in st.session_state.messages])
         
         # Send the chat history to the grader model
-        grader_response = st.session_state.grader.send_message(chat_history)
+        grader_response = st.session_state.grader.send_message("以下是問診記錄：\n"+chat_history)
 
-        # print(grader_response)
+        print(grader_response.text)
 
         # Convert grader_response.text to JSON
-        grader_response_json = json.loads(grader_response.text)
-        print(grader_response_json)
+        # grader_response_json = json.loads(grader_response.text)
+        # print(grader_response_json)
 
         # Display grader response in chat message container with different profile picture color
         with st.chat_message("grader"):
