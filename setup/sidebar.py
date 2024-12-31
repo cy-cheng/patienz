@@ -24,6 +24,9 @@ def open_config():
 
     config["疾病科別"] = st.selectbox("疾病科別", ["隨機"] + field_options)
 
+    config["疾病"] = st.text_input("疾病", "隨機")
+    config["病史"] = st.text_input("病史", "隨機")
+
     if st.button("確定"):
         config["年齡"] = random.randint(config["年齡"][0], config["年齡"][1])
 
