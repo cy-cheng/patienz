@@ -8,6 +8,7 @@ def create_grader_model(grader_instruction_path: str):
     with open(grader_instruction_path, 'r', encoding='utf-8') as file:
         grader_instruction = file.read()
 
+    """
     generation_config = {
         "temperature": 1,
         "top_p": 0.95,
@@ -25,6 +26,8 @@ def create_grader_model(grader_instruction_path: str):
             type=content.Type.ARRAY,
             items=content.Schema( 
                 type=content.Type.OBJECT,
+                enum=[],
+                required=["item", "full_score", "real_score", "feedback"],
                 properties={
                     "item": content.Schema(type=content.Type.STRING),
                     "full_score": content.Schema(type=content.Type.INTEGER),
@@ -35,8 +38,7 @@ def create_grader_model(grader_instruction_path: str):
         ),
         "response_mime_type": "application/json",
     }
-    """
-
+    
     model = genai.GenerativeModel(
         model_name="gemini-1.5-flash",
         generation_config=generation_config,
