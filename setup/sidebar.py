@@ -1,7 +1,7 @@
 import streamlit as st 
 import random
 
-@st.dialog("輸入病患資訊")
+@st.dialog("選擇病患資訊")
 def open_config():
     config = {
         "年齡": None,
@@ -41,6 +41,10 @@ def open_config():
 
 
 def patient_info():
+    if "enter_app" not in st.session_state:
+        st.session_state.enter_app = True
+        open_config()
+
     with st.sidebar:
         if "user_config" not in st.session_state:
             if st.button("設定病患資訊"):
