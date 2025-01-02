@@ -63,6 +63,25 @@ with column[1]:
             with open(f"data/problem_set/{file_name}", "w") as f:
                 f.write(st.session_state.problem)
 
+def processGradingResult(_input): # call after .text
+    grading_result = json.loads(_input)
+    sorted_result = sorted(grading_result, key=lambda x: (x['group'], x['id']));
+
+    table_formatter = "|評分項目|配分|得分|回饋|\n|:---:|:---:|:---:|:---:|\n"
+    grades = [table_formatter]*5
+    full_scores = [0, 0, 0, 0, 0]
+    real_scores = [0, 0, 0, 0, 0]
+
+    for data in sorted_result:
+        # gp = int(data['group'])-1
+        full_scores[data['group']-1] += int(data['full_score'])
+        real_scores[data['group']-1] += int(data['real_score'])
+        grades[data['group']-1] += (f"|{data['item']}|{data['full_score']}|{data['real_score']}|{data['feedback']}|\n")
+
+    for i in range(5):
+        grades[i] += (f"|總分|{full_scores[i]}|得分|{real_scores[i]}|\n\n");
+
+    return str(grades[0]+grades[1]+grades[2]+grades[3]+grades[4])
 
 
 if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messages) == 0:
@@ -73,8 +92,18 @@ if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messa
     
     grader_response = st.session_state.grader.send_message("以下是問診記錄：\n"+chat_history+"\n請針對此份問診給出客觀的評分")
 
-    print(grader_response.text)
-
-    st.session_state.grading_messages = [{"role": "grader", "content": grader_response.text}]
-    update_chat_history()
+    # print(grader_response.text)
     
+    grading_result = json.loads(grader_response.text)
+    sorted_result = sorted(grading_result, key=lambda x: (x['group'], x['id']));
+    sorted_result = json.dumps(sorted_result, indent=4, ensure_ascii=False)
+
+    grading_result = processGradingResult(grader_response.text)
+    
+    print(grading_result)
+
+    #st.session_state.grading_messages = [{"role": "grader", "content": grader_response.text}]
+    st.session_state.grading_messages = [{"role": "grader", "content": grading_result}]
+
+    update_chat_history()
+

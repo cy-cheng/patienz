@@ -8,15 +8,6 @@ def create_grader_model(grader_instruction_path: str):
     with open(grader_instruction_path, 'r', encoding='utf-8') as file:
         grader_instruction = file.read()
 
-    """
-    generation_config = {
-        "temperature": 1,
-        "top_p": 0.95,
-        "top_k": 40,
-        "max_output_tokens": 8192,
-        "response_mime_type": "text/plain",
-    }
-    """
     generation_config = {
         "temperature": 1,
         "top_p": 0.95,
@@ -27,8 +18,10 @@ def create_grader_model(grader_instruction_path: str):
             items=content.Schema( 
                 type=content.Type.OBJECT,
                 enum=[],
-                required=["item", "full_score", "real_score", "feedback"],
+                required=["group","id","item", "full_score", "real_score", "feedback"],
                 properties={
+                    "group": content.Schema(type=content.Type.INTEGER),
+                    "id": content.Schema(type=content.Type.INTEGER),
                     "item": content.Schema(type=content.Type.STRING),
                     "full_score": content.Schema(type=content.Type.INTEGER),
                     "real_score": content.Schema(type=content.Type.INTEGER),
