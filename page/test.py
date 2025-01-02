@@ -1,5 +1,6 @@
 import streamlit as st
 from model.patient import create_patient_model
+import page.dialog as dialog
 import json
 
 # Configure instruction file paths
@@ -52,12 +53,19 @@ with column[1]:
     input_container = st.container()
     with input_container:
         if prompt := st.chat_input("輸入您對病人的話", key="user_input"):
-            st.session_state.diagnostic_messages.append({"role": "doctor", "content": prompt})
-            update_chat_history()
-            
-            response = st.session_state.patient.send_message(f"醫生：{prompt}")
-            st.session_state.diagnostic_messages.append({"role": "patient", "content": response.text})
-            update_chat_history()
+            if "patient" not in st.session_state:
+                dialog.no_config()
+
+            elif "diagnostic_ended" in st.session_state:
+                dialog.diagnostic_ended()
+
+            else:
+                st.session_state.diagnostic_messages.append({"role": "doctor", "content": prompt})
+                update_chat_history()
+                
+                response = st.session_state.patient.send_message(f"醫生：{prompt}")
+                st.session_state.diagnostic_messages.append({"role": "patient", "content": response.text})
+                update_chat_history()
 
 # Add a confirm answer button outside the input container
     button_container = st.container()
@@ -70,7 +78,10 @@ with column[3]:
     st.header("病人資料")
     data_container = st.container(height=350)
     if "data" in st.session_state:
+        data = st.session_state.data
         with data_container:
-            basic_info = st.session_state.data["基本資訊"]
-            st.write(f"姓名：{basic_info['姓名']}")
-            st.write(f"年齡：{basic_info['年齡']}")
+            st.write(f"姓名：{data['基本資訊']['姓名']}")
+            st.write(f"年齡：{data['基本資訊']['年齡']}")
+            st.write(f"性別：{data['基本資訊']['性別']}")
+            st.write(f"身高：{data['基本資訊']['身高']}")
+            st.write(f"體重：{data['基本資訊']['體重']}")

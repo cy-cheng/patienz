@@ -1,6 +1,6 @@
 import streamlit as st
 from model.grader import create_grader_model
-import setup.sidebar
+import datetime
 import json
 
 GRADER_INSTRUCTION = "instruction_file/grader_inst_gpt.txt"
@@ -30,7 +30,7 @@ with column[1]:
 
     def update_chat_history():
         chat_area.empty()
-        with chat_area.container(height=600):
+        with chat_area.container(height=576):
             for msg in st.session_state.grading_messages:
                 with st.chat_message(msg["role"], avatar=avatar_map[msg["role"]]):
                     st.markdown(msg["content"])
@@ -50,13 +50,25 @@ with column[1]:
             st.session_state.grading_messages.append({"role": "grader", "content": response.text})
             update_chat_history()
 
+    button_column = st.columns([1, 1])
+    with button_column[0]:
+        if st.button("結束評分"):
+            st.session_state.grade_ended = True
+
+    with button_column[1]:
+        if st.button("儲存本次病患設定"):
+            data = st.session_state.data
+            file_name = f"{datetime.datetime.now().strftime('%Y%m%d')} - {data['基本資訊']['姓名']} - {data['Problem']['疾病']}.json"
+
+            with open(f"data/problem_set/{file_name}", "w") as f:
+                f.write(st.session_state.problem)
 
 
-if "diagnostic_ended" in st.session_state and "grader_model" not in st.session_state:
+
+if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messages) == 0:
     grader_model = create_grader_model(GRADER_INSTRUCTION)
     st.session_state.grader_model = grader_model
     st.session_state.grader = st.session_state.grader_model.start_chat()
-    
     chat_history = "\n".join([f"{msg['role']}：{msg['content']}" for msg in st.session_state.diagnostic_messages])
     
     grader_response = st.session_state.grader.send_message("以下是問診記錄：\n"+chat_history+"\n請針對此份問診給出客觀的評分")
@@ -66,5 +78,3 @@ if "diagnostic_ended" in st.session_state and "grader_model" not in st.session_s
     st.session_state.grading_messages = [{"role": "grader", "content": grader_response.text}]
     update_chat_history()
     
-
-

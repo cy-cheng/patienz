@@ -1,5 +1,6 @@
 import streamlit as st 
 from model.problem_setter import create_problem_setter_model
+import page.dialog as dialog
 import os
 import random
 import json
@@ -17,7 +18,7 @@ config = {
 major_column = st.columns([2, 8, 2])
 
 with major_column[1]:
-    st.title("病患資訊設定")
+    st.header("病患資訊設定")
     
     st.session_state.config_type = st.radio("選擇設定方式", ["輸入參數", "模板題", "題目存檔"])
 
@@ -37,13 +38,17 @@ with major_column[1]:
         config["疾病"] = st.text_input("疾病", "隨機")
         config["病史"] = st.text_input("病史", "隨機")
     elif st.session_state.config_type == "模板題":
-        problem_set = os.listdir("data/problem_set/")
+        problem_set = os.listdir("data/template_problem_set/")
         problem = st.selectbox("模板題選單", problem_set, index=None)
     elif st.session_state.config_type == "題目存檔":
         problem_set = os.listdir("data/problem_set/")
         problem = st.selectbox("過去練習記錄", problem_set, index=None)
 
     if st.button("確定"):
+        if "problem" in st.session_state:
+            dialog.has_config()
+            pass
+
         if st.session_state.config_type == "輸入參數":
             config["年齡"] = random.randint(config["年齡"][0], config["年齡"][1])
 
@@ -52,11 +57,18 @@ with major_column[1]:
 
             if config["疾病科別"] == "隨機":
                 config["疾病科別"] = random.choice(field_options)
-        else:
-            with open(f"data/problem_set/{problem}", "r") as f:
-                problem = f.read()
-            st.switch_page("page/test.py")
+        elif st.session_state.config_type == "模板題":
+            with open(f"data/template_problem_set/{problem}", "r") as f:
+                st.session_state.problem = f.read()
+            print(f"Problem: {problem}")
             st.session_state.data = json.loads(st.session_state.problem) 
+            st.switch_page("page/test.py")
+        else:
+            with open(f"data/template_problem_set/{problem}", "r") as f:
+                st.session_state.problem = f.read()
+            print(f"Problem: {problem}")
+            st.session_state.data = json.loads(st.session_state.problem) 
+            st.switch_page("page/test.py")
 
         st.session_state.user_config = config
 
