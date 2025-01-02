@@ -7,9 +7,9 @@ def welcome():
     st.markdown("本系統提供病患看診、評分等功能。")
 
 pages = [
-    st.Page("pages/config.py", title="病患設定", icon="🔧"),
-    st.Page("pages/test.py", title="看診區", icon="🩺"),
-    st.Page("pages/grade.py", title="評分區", icon="📝"),
+    st.Page("page/config.py", title="病患設定", icon="🔧"),
+    st.Page("page/test.py", title="看診區", icon="🩺"),
+    st.Page("page/grade.py", title="評分區", icon="📝"),
 ]
 
 page = st.navigation(pages)
