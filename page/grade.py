@@ -40,6 +40,9 @@ with column[1]:
     input_container = st.container()
     with input_container:
         if prompt := st.chat_input("輸入您對評分的問題", key="user_input"):
+            if "grade_ended" in st.session_state:
+                pass
+
             st.session_state.grading_messages.append({"role": "doctor", "content": prompt})
             update_chat_history()
             
