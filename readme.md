@@ -12,4 +12,4 @@ Note: remember to add your `GEMINI_API_KEY` to your environment variables.
 
 ## Testing the application
 
-- Run `./run.sh` to start the application (local)
+- Run `streamlit run home.py` to start the application (local)
