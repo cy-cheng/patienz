@@ -48,8 +48,7 @@ with major_column[1]:
         if "problem" in st.session_state:
             dialog.has_config()
             pass
-
-        if st.session_state.config_type == "輸入參數":
+        elif st.session_state.config_type == "輸入參數":
             config["年齡"] = random.randint(config["年齡"][0], config["年齡"][1])
 
             if config["性別"] == "隨機":
@@ -64,7 +63,7 @@ with major_column[1]:
             st.session_state.data = json.loads(st.session_state.problem) 
             st.switch_page("page/test.py")
         else:
-            with open(f"data/template_problem_set/{problem}", "r") as f:
+            with open(f"data/problem_set/{problem}", "r") as f:
                 st.session_state.problem = f.read()
             print(f"Problem: {problem}")
             st.session_state.data = json.loads(st.session_state.problem) 

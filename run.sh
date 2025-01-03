@@ -1,3 +1,3 @@
 #!/bin/zsh
 
-streamlit run app.py
+streamlit run home.py

@@ -12,7 +12,7 @@ avatar_map = {
     "grader": "🏫"
 }
 
-column = st.columns([2, 8, 2])
+column = st.columns([1, 10, 2])
 
 with column[1]:
     st.header("對話區")
@@ -52,11 +52,11 @@ with column[1]:
 
     button_column = st.columns([1, 1])
     with button_column[0]:
-        if st.button("結束評分"):
+        if st.button("結束評分", use_container_width=True):
             st.session_state.grade_ended = True
 
     with button_column[1]:
-        if st.button("儲存本次病患設定"):
+        if st.button("儲存本次病患設定", use_container_width=True):
             data = st.session_state.data
             file_name = f"{datetime.datetime.now().strftime('%Y%m%d')} - {data['基本資訊']['姓名']} - {data['Problem']['疾病']}.json"
 
@@ -106,4 +106,5 @@ if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messa
     st.session_state.grading_messages = [{"role": "grader", "content": grading_result}]
 
     update_chat_history()
+
 
