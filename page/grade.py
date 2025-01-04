@@ -29,7 +29,7 @@ with column[1]:
     }
 
     def update_chat_history():
-        chat_area.empty()
+        # chat_area.empty()
         with chat_area.container(height=576):
             for msg in st.session_state.grading_messages:
                 with st.chat_message(msg["role"], avatar=avatar_map[msg["role"]]):
@@ -85,26 +85,28 @@ def processGradingResult(_input): # call after .text
 
 
 if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messages) == 0:
+    # Initialize grader model
     grader_model = create_grader_model(GRADER_INSTRUCTION)
     st.session_state.grader_model = grader_model
     st.session_state.grader = st.session_state.grader_model.start_chat()
+    
     chat_history = "\n".join([f"{msg['role']}：{msg['content']}" for msg in st.session_state.diagnostic_messages])
     
-    grader_response = st.session_state.grader.send_message("以下是問診記錄：\n"+chat_history+"\n請針對此份問診給出客觀的評分")
-
-    # print(grader_response.text)
+    test_answer_json = st.session_state.data
+    test_answer = f"正確病症：{test_answer_json["Problem"]["疾病"]}"
     
-    grading_result = json.loads(grader_response.text)
-    sorted_result = sorted(grading_result, key=lambda x: (x['group'], x['id']));
-    sorted_result = json.dumps(sorted_result, indent=4, ensure_ascii=False)
-
+    st.session_state.grading_messages = [{"role": "grader", "content": test_answer}]
+    update_chat_history()
+    
+    answer_for_grader = f"以下JSON記錄的為正確診斷與病人資訊：\n{test_answer_json}\n"
+    grader_response = st.session_state.grader.send_message(answer_for_grader+"以下是問診記錄：\n"+chat_history+"\n請針對此份問診給出客觀的評分")
     grading_result = processGradingResult(grader_response.text)
     
-    print(grading_result)
+    # json_result = json.dumps(grading_result, ensure_ascii=False, indent=4) 
+    # print(json_result)
 
-    #st.session_state.grading_messages = [{"role": "grader", "content": grader_response.text}]
-    st.session_state.grading_messages = [{"role": "grader", "content": grading_result}]
-
+    # st.session_state.grading_messages = [{"role": "grader", "content": grader_response.text}]
+    st.session_state.grading_messages.append({"role": "grader", "content": grading_result})
     update_chat_history()
 
 
