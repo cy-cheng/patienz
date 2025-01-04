@@ -3,7 +3,7 @@ from model.grader import create_grader_model
 import datetime
 import json
 
-GRADER_INSTRUCTION_FOLDER = "instruction_file/"
+GRADER_INSTRUCTION = "instruction_file/grader_inst_gpt.txt"
 
 # Define avatar map 
 avatar_map = {
@@ -63,36 +63,33 @@ with column[1]:
             with open(f"data/problem_set/{file_name}", "w") as f:
                 f.write(st.session_state.problem)
 
-def getGradingResult(current_model, messages_for_grading):
-    st.session_state.grader_model = current_model
-    st.session_state.grader = st.session_state.grader_model.start_chat()
-    return st.session_state.grader.send_message(messages_for_grading)
-
 def processGradingResult(_input): # call after .text
     grading_result = json.loads(_input)
-    sorted_result = sorted(grading_result, key=lambda x: (x['id']))
+    sorted_result = sorted(grading_result, key=lambda x: (x['group'], x['id']));
 
-    grades = "|評分項目|配分|得分|回饋|\n|:---:|:---:|:---:|:---:|\n"
-    full_score = 0
-    real_score = 0
+    table_formatter = "|評分項目|配分|得分|回饋|\n|:---:|:---:|:---:|:---:|\n"
+    grades = [table_formatter]*5
+    full_scores = [0, 0, 0, 0, 0]
+    real_scores = [0, 0, 0, 0, 0]
 
     for data in sorted_result:
-        full_score += int(data['full_score'])
-        real_score += int(data['real_score'])
-        grades += (f"|{data['item']}|{data['full_score']}|{data['real_score']}|{data['feedback']}|\n")
+        # gp = int(data['group'])-1
+        full_scores[data['group']-1] += int(data['full_score'])
+        real_scores[data['group']-1] += int(data['real_score'])
+        grades[data['group']-1] += (f"|{data['item']}|{data['full_score']}|{data['real_score']}|{data['feedback']}|\n")
 
-    grades += (f"|總分|{full_score}|得分|{real_score}|\n\n")
+    for i in range(5):
+        grades[i] += (f"|總分|{full_scores[i]}|得分|{real_scores[i]}|\n\n");
 
-    return grades
+    return str(grades[0]+grades[1]+grades[2]+grades[3]+grades[4])
 
 
 if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messages) == 0:
-    # Initialize grader models
-    grader_models = []
-    for i in range(5):
-        grader_models.append(create_grader_model(GRADER_INSTRUCTION_FOLDER+"grader_inst_"+chr(65+i)+".txt")) # A to E
+    # Initialize grader model
+    grader_model = create_grader_model(GRADER_INSTRUCTION)
+    st.session_state.grader_model = grader_model
+    st.session_state.grader = st.session_state.grader_model.start_chat()
     
-    # Process chat history and some info
     chat_history = "\n".join([f"{msg['role']}：{msg['content']}" for msg in st.session_state.diagnostic_messages])
     
     test_answer_json = st.session_state.data
@@ -102,22 +99,13 @@ if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messa
     update_chat_history()
     
     answer_for_grader = f"以下JSON記錄的為正確診斷與病人資訊：\n{test_answer_json}\n"
+    grader_response = st.session_state.grader.send_message(answer_for_grader+"以下是問診記錄：\n"+chat_history+"\n請針對此份問診給出客觀的評分")
+    grading_result = processGradingResult(grader_response.text)
     
-    # Grading...
-    grader_responses = []
-    grading_results = []
-    for i in range(5):
-        if i <= 2:
-            grader_responses.append(getGradingResult(grader_models[i],"以下是問診記錄：\n"+chat_history+"\n請針對此份問診給出客觀的評分"))
-        else:
-            grader_responses.append(getGradingResult(grader_models[i],answer_for_grader+"以下是問診記錄：\n"+chat_history+"\n請針對此份問診給出客觀的評分"))
-        grading_results.append(processGradingResult(grader_responses[i].text))
-    
-    # Merge grading results
-    grading_result = ""
-    for i in range(5):
-        grading_result += grading_results[i]
+    # json_result = json.dumps(grading_result, ensure_ascii=False, indent=4) 
+    # print(json_result)
 
+    # st.session_state.grading_messages = [{"role": "grader", "content": grader_response.text}]
     st.session_state.grading_messages.append({"role": "grader", "content": grading_result})
     update_chat_history()
 

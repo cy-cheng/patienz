@@ -18,9 +18,10 @@ def create_grader_model(grader_instruction_path: str):
             items=content.Schema( 
                 type=content.Type.OBJECT,
                 enum=[],
-                required=["group","id","item", "full_score", "real_score", "feedback"],
+                # required=["group", "id", "item", "full_score", "real_score", "feedback"],
+                required=["id", "item", "full_score", "real_score", "feedback"],
                 properties={
-                    "group": content.Schema(type=content.Type.INTEGER),
+                    #"group": content.Schema(type=content.Type.INTEGER),
                     "id": content.Schema(type=content.Type.INTEGER),
                     "item": content.Schema(type=content.Type.STRING),
                     "full_score": content.Schema(type=content.Type.INTEGER),
