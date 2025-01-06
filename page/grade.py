@@ -33,7 +33,7 @@ with column[1]:
         with chat_area.container(height=576):
             for msg in st.session_state.grading_messages:
                 with st.chat_message(msg["role"], avatar=avatar_map[msg["role"]]):
-                    st.markdown(msg["content"])
+                    st.markdown(msg["content"], unsafe_allow_html=True)
 
     update_chat_history()
 
@@ -79,20 +79,46 @@ def processGradingResult(_input, ctrl): # call after .text
     grading_result = json.loads(_input)
     sorted_result = sorted(grading_result, key=lambda x: (x['id']))
 
-    if ctrl == 0:
-        grades = f"|第{ctrl+1}類評分項目|配分|得分|回饋|\n|:---:|:---:|:---:|:---:|\n"
-    else:
-        grades = f"|***|***|***|***|\n|第{ctrl+1}類評分項目|配分|得分|回饋|\n"
-
+    grades = ""
+    
+    open_str = "<th style=\"white-space: nowrap;\">"
+    
+    if ctrl != 0:
+        grades += "<tr>\n"
+        grades += f"{open_str}***</th>\n"
+        grades += f"{open_str}***</th>\n"
+        grades += f"{open_str}***</th>\n"
+        grades += f"{open_str}***</th>\n"
+        grades += "</tr>\n"
+    
+    grades += "<tr>\n"
+    grades += f"{open_str}第{ctrl+1}類評分項目</th>\n"
+    grades += f"{open_str}配分</th>\n"
+    grades += f"{open_str}得分</th>\n"
+    grades += f"{open_str}回饋</th>\n"
+    grades += "</tr>\n"
+    
     full_score = 0
     real_score = 0
 
     for data in sorted_result:
         full_score += int(data['full_score'])
         real_score += int(data['real_score'])
-        grades += (f"|{data['item']}|{data['full_score']}|{data['real_score']}|{data['feedback']}|\n")
 
-    grades += (f"|類別總分|{full_score}|類別得分|{real_score}|\n")
+        grades += "<tr>\n"
+        grades += f"{open_str}{data['item']}</th>\n"
+        grades += f"{open_str}{data['full_score']}</th>\n"
+        grades += f"{open_str}{data['real_score']}</th>\n"
+        grades += f"{open_str}{data['feedback']}</th>\n"
+        grades += "</tr>\n"
+
+    grades += "<tr>\n"
+    grades += f"{open_str}類別總分</th>\n"
+    grades += f"{open_str}{full_score}</th>\n"
+    grades += f"{open_str}類別得分</th>\n"
+    grades += f"{open_str}{real_score}</th>\n"
+    grades += "</tr>\n"
+
     total_scores += full_score
     gotten_scores += real_score
 
@@ -127,10 +153,12 @@ if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messa
         grading_results.append(processGradingResult(grader_responses[i].text, i))
     
     # Merge grading results
-    grading_result = ""
+    grading_result = "<table style=\"width:100%; border-collapse: collapse;\">\n"
+
     for i in range(5):
         grading_result += grading_results[i]
-    grading_result += f"\n得分率：{round(gotten_scores/total_scores*1000)/10}%\n"
+    grading_result += "</table>\n"
+    grading_result += f"<p style='margin-top: 20px;'>得分率：{round(gotten_scores/total_scores*1000)/10}%。</p>\n"
 
     print(grading_result)
 
