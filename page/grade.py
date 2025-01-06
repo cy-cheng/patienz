@@ -15,7 +15,7 @@ avatar_map = {
 column = st.columns([1, 10, 2])
 
 with column[1]:
-    st.header("對話區")
+    st.header("評分結果")
     output_container = st.container()
     chat_area = output_container.empty()
 
@@ -68,11 +68,22 @@ def getGradingResult(current_model, messages_for_grading):
     st.session_state.grader = st.session_state.grader_model.start_chat()
     return st.session_state.grader.send_message(messages_for_grading)
 
-def processGradingResult(_input): # call after .text
+# Scores
+total_scores = 0
+gotten_scores = 0
+
+def processGradingResult(_input, ctrl): # call after .text
+    global total_scores
+    global gotten_scores
+
     grading_result = json.loads(_input)
     sorted_result = sorted(grading_result, key=lambda x: (x['id']))
 
-    grades = "|評分項目|配分|得分|回饋|\n|:---:|:---:|:---:|:---:|\n"
+    if ctrl == 0:
+        grades = f"|第{ctrl+1}類評分項目|配分|得分|回饋|\n|:---:|:---:|:---:|:---:|\n"
+    else:
+        grades = f"|***|***|***|***|\n|第{ctrl+1}類評分項目|配分|得分|回饋|\n"
+
     full_score = 0
     real_score = 0
 
@@ -81,10 +92,11 @@ def processGradingResult(_input): # call after .text
         real_score += int(data['real_score'])
         grades += (f"|{data['item']}|{data['full_score']}|{data['real_score']}|{data['feedback']}|\n")
 
-    grades += (f"|總分|{full_score}|得分|{real_score}|\n\n")
+    grades += (f"|類別總分|{full_score}|類別得分|{real_score}|\n")
+    total_scores += full_score
+    gotten_scores += real_score
 
     return grades
-
 
 if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messages) == 0:
     # Initialize grader models
@@ -111,12 +123,16 @@ if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messa
             grader_responses.append(getGradingResult(grader_models[i],"以下是問診記錄：\n"+chat_history+"\n請針對此份問診給出客觀的評分"))
         else:
             grader_responses.append(getGradingResult(grader_models[i],answer_for_grader+"以下是問診記錄：\n"+chat_history+"\n請針對此份問診給出客觀的評分"))
-        grading_results.append(processGradingResult(grader_responses[i].text))
+        
+        grading_results.append(processGradingResult(grader_responses[i].text, i))
     
     # Merge grading results
     grading_result = ""
     for i in range(5):
         grading_result += grading_results[i]
+    grading_result += f"\n得分率：{round(gotten_scores/total_scores*1000)/10}%\n"
+
+    print(grading_result)
 
     st.session_state.grading_messages.append({"role": "grader", "content": grading_result})
     update_chat_history()
