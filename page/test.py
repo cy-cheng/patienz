@@ -67,12 +67,24 @@ with column[1]:
                 st.session_state.diagnostic_messages.append({"role": "patient", "content": response.text})
                 update_chat_history()
 
+    sub_column = st.columns([1, 1])
+    with sub_column[0]:
+        st.session_state.diagnosis = st.text_input("診斷")
+    
+    with sub_column[1]:
+        st.session_state.treatment = st.text_input("處置")
+
 # Add a confirm answer button outside the input container
     button_container = st.container()
     with button_container:
         if st.button("完成問診"):
-            st.session_state.diagnostic_ended = True
-            st.switch_page("page/grade.py")
+            if st.session_state.diagnosis != "" and st.session_state.treatment != "":
+                print(st.session_state.diagnosis)
+                print(st.session_state.treatment)
+                st.session_state.diagnostic_ended = True
+                st.switch_page("page/grade.py")
+            else:
+                st.warning("請先完成診斷和處置")
 
 with column[3]:
     st.header("病人資料")
