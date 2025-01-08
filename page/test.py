@@ -61,7 +61,7 @@ with column[1]:
             else:
                 st.session_state.diagnostic_messages.append({"role": "doctor", "content": prompt})
                 update_chat_history()
-                
+
                 response = st.session_state.patient.send_message(f"醫生：{prompt}")
                 st.session_state.diagnostic_messages.append({"role": "patient", "content": response.text})
                 update_chat_history()

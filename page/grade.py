@@ -38,58 +38,21 @@ def process_grading_result(input_json):
     df = pd.concat([df, pd.DataFrame([category_score])], ignore_index=True)
     return df, df["配分"].sum(), df["得分"].sum()
 
-# Render table as HTML
 def render_html_table(df):
+    left_align = lambda x: f"<div style='text-align: left;'>{x}</div>"
+    cent_align = lambda x: f"<div style='text-align: center;'>{x}</div>"
+
     html_table = df.to_html(
         index=False,
         escape=False,
         classes="dataframe table",
-        table_id="grading-results"
+        table_id="grading-results",
+        col_space="4em",
+        formatters=[left_align, left_align, cent_align, cent_align],
+        justify="center",
     )
-    html_string = f"""
-    <style>
-        /* Table styles */
-        table {{
-            width: 100%;
-            border-collapse: collapse;
-        }}
-        th, td {{
-            border: 1px solid #333333;
-            padding: 8px;
-            word-wrap: break-word;
-            white-space: normal;
-        }}
-        td {{
-            text-align: left;
-        }}
-        th {{
-            background-color: var(--primary-color);
-            color: var(--text-color);
-            text-align: center;
-        }}
 
-        /* Theme handling */
-        body {{
-            color: var(--text-color);
-        }}
-        @media (prefers-color-scheme: dark) {{
-            body {{
-                --primary-color: #444444;
-                --text-color: white;
-            }}
-        }}
-        @media (prefers-color-scheme: light) {{
-            body {{
-                --primary-color: #e0e0e0;
-                --text-color: black;
-            }}
-        }}
-    </style>
-    <div class="scrollable-table">
-        {html_table}
-    </div>
-    """
-    return html_string
+    return html_table
 
 # Initialize Streamlit session state
 if "grading_messages" not in st.session_state:
@@ -97,10 +60,13 @@ if "grading_messages" not in st.session_state:
 if "grade_ended" not in st.session_state:
     st.session_state.grade_ended = False
 
+output_container = st.container()
+chat_area = output_container.empty()
+
 # Update chat history
 def update_chat_history():
     chat_area.empty()
-    with chat_area.container():
+    with chat_area.container(height=350):
         for msg in st.session_state.grading_messages:
             with st.chat_message(msg["role"], avatar=AVATAR_MAP[msg["role"]]):
                 st.markdown(msg["content"])
@@ -108,14 +74,13 @@ def update_chat_history():
 # Layout
 st.header("評分結果")
 tabs = st.tabs(["Model A", "Model B", "Model C", "Model D", "Model E"])
-chat_area = st.container()
 
 # Input form
 with st.container():
     if prompt := st.chat_input("輸入您對評分的問題"):
         st.session_state.grading_messages.append({"role": "doctor", "content": prompt})
         update_chat_history()
-        # Assume `grader` is initialized elsewhere
+
         response = st.session_state.grader.send_message(f"學生：{prompt}")
         st.session_state.grading_messages.append({"role": "grader", "content": response.text})
         update_chat_history()
@@ -151,7 +116,9 @@ if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messa
         tasks = [get_grading_result_async(model, msg) for model, msg in zip(grader_models, messages)]
         return await asyncio.gather(*tasks)
 
-    grading_responses = asyncio.run(run_models())
+    with st.spinner("評分中..."):
+        grading_responses = asyncio.run(run_models())
+
 
     total_scores = 0
     gotten_scores = 0
@@ -162,10 +129,13 @@ if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messa
         gotten_scores += real_score
 
         with tabs[i]:
-            with st.expander("評分結果", expanded=True):
-                st.components.v1.html(render_html_table(df), height=400, scrolling=True)
+            st.subheader(f"評分結果")
+            with st.expander("", expanded=True):
+                st.markdown(render_html_table(df), unsafe_allow_html=True)
 
     score_percentage = round(gotten_scores / total_scores * 100, 1)
     st.write(f"得分率：{score_percentage}%")
+
+    grand_grader = create_grader_model(f"{GRADER_INSTRUCTION_FOLDER}grader_inst_grand.txt")
 
 
