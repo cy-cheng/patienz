@@ -2,11 +2,12 @@ import streamlit as st
 import asyncio
 import pandas as pd
 from model.grader import create_grader_model
+from model.advisor import create_advisor_model
 import datetime
 import json
 
-GRADER_INSTRUCTION_FOLDER = "instruction_file/"
-AVATAR_MAP = {"doctor": "⚕️", "patient": "😥", "grader": "🏫"}
+INSTRUCTION_FOLDER = "instruction_file/"
+AVATAR_MAP = {"doctor": "⚕️", "patient": "😥", "advisor": "🏫"}
 
 # Async helper for running grading models in parallel
 async def get_grading_result_async(current_model, messages_for_grading):
@@ -55,8 +56,8 @@ def render_html_table(df):
     return html_table
 
 # Initialize Streamlit session state
-if "grading_messages" not in st.session_state:
-    st.session_state.grading_messages = []
+if "advice_messages" not in st.session_state:
+    st.session_state.advice_messages = []
 if "grade_ended" not in st.session_state:
     st.session_state.grade_ended = False
 
@@ -67,13 +68,54 @@ chat_area = output_container.empty()
 def update_chat_history():
     chat_area.empty()
     with chat_area.container(height=350):
-        for msg in st.session_state.grading_messages:
+        for msg in st.session_state.advice_messages:
             with st.chat_message(msg["role"], avatar=AVATAR_MAP[msg["role"]]):
                 st.markdown(msg["content"])
 
 # Layout
 st.header("評分結果")
-tabs = st.tabs(["Model A", "Model B", "Model C", "Model D", "Model E"])
+tabs = st.tabs(["病況詢問", "病史詢問", "溝通技巧與感情支持", "鑑別診斷", "疾病處置"])
+
+
+# Run grading models in parallel
+if "diagnostic_ended" in st.session_state and "advisor" not in st.session_state:
+    grader_models = [create_grader_model(f"{INSTRUCTION_FOLDER}grader_inst_{chr(65+i)}.txt") for i in range(5)]
+
+    chat_history = "\n".join([f"{msg['role']}：{msg['content']}" for msg in st.session_state.diagnostic_messages])
+    chat_history += f"\n特別注意：**以下是實習醫師的診斷結果：{st.session_state.diagnosis}**"
+    chat_history += f"\n特別注意：**以下是實習醫師的判斷處置：{st.session_state.treatment}**"
+
+    answer_for_grader = f"以下JSON記錄的為正確診斷與病人資訊：\n{st.session_state.data}\n"
+    messages = [chat_history if i <= 2 else answer_for_grader + chat_history for i in range(5)]
+
+    # Run models asynchronously
+    async def run_models():
+        tasks = [get_grading_result_async(model, msg) for model, msg in zip(grader_models, messages)]
+        return await asyncio.gather(*tasks)
+
+    with st.spinner("評分中..."):
+        st.session_state.grading_responses = asyncio.run(run_models())
+
+
+    total_scores = 0
+    gotten_scores = 0
+
+    for i, response in enumerate(st.session_state.grading_responses):
+        df, full_score, real_score = process_grading_result(response)
+        total_scores += full_score
+        gotten_scores += real_score
+
+        with tabs[i]:
+            st.subheader(f"評分結果")
+            with st.expander("", expanded=True, height=400):
+                st.markdown(render_html_table(df), unsafe_allow_html=True)
+
+    score_percentage = round(gotten_scores / total_scores * 100, 1)
+    st.session_state.advice_messages.append(f"你的得分率是：{score_percentage}%")
+    update_chat_history()
+
+    create_advisor_model(f"{INSTRUCTION_FOLDER}advisor_instruction.txt")
+
 
 # Input form
 with st.container():
@@ -99,43 +141,3 @@ with subcolumns[1]:
         file_name = f"{datetime.datetime.now().strftime('%Y%m%d')} - {data['基本資訊']['姓名']} - {data['Problem']['疾病']}.json"
         with open(f"data/problem_set/{file_name}", "w") as f:
             f.write(st.session_state.problem)
-
-# Run grading models in parallel
-if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messages) == 0:
-    grader_models = [create_grader_model(f"{GRADER_INSTRUCTION_FOLDER}grader_inst_{chr(65+i)}.txt") for i in range(5)]
-
-    chat_history = "\n".join([f"{msg['role']}：{msg['content']}" for msg in st.session_state.diagnostic_messages])
-    chat_history += f"\n特別注意：**以下是實習醫師的診斷結果：{st.session_state.diagnosis}**"
-    chat_history += f"\n特別注意：**以下是實習醫師的判斷處置：{st.session_state.treatment}**"
-
-    answer_for_grader = f"以下JSON記錄的為正確診斷與病人資訊：\n{st.session_state.data}\n"
-    messages = [chat_history if i <= 2 else answer_for_grader + chat_history for i in range(5)]
-
-    # Run models asynchronously
-    async def run_models():
-        tasks = [get_grading_result_async(model, msg) for model, msg in zip(grader_models, messages)]
-        return await asyncio.gather(*tasks)
-
-    with st.spinner("評分中..."):
-        grading_responses = asyncio.run(run_models())
-
-
-    total_scores = 0
-    gotten_scores = 0
-
-    for i, response in enumerate(grading_responses):
-        df, full_score, real_score = process_grading_result(response)
-        total_scores += full_score
-        gotten_scores += real_score
-
-        with tabs[i]:
-            st.subheader(f"評分結果")
-            with st.expander("", expanded=True):
-                st.markdown(render_html_table(df), unsafe_allow_html=True)
-
-    score_percentage = round(gotten_scores / total_scores * 100, 1)
-    st.write(f"得分率：{score_percentage}%")
-
-    grand_grader = create_grader_model(f"{GRADER_INSTRUCTION_FOLDER}grader_inst_grand.txt")
-
-
