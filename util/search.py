@@ -21,13 +21,13 @@ def search_and_export_to_pdf(query, output_pdf):
         search_results = list(search(query, num_results=5))
 
         for url in search_results:
-            response = requests.get(url)
-
-            if response.status_code != 200:
-                print(f"Failed to access URL: {url}")
-                continue
-
             try:
+                response = requests.get(url)
+
+                if response.status_code != 200:
+                    print(f"Failed to access URL: {url}")
+                    continue
+
                 print(f"Exporting {url} to {output_pdf}...")
                 pdfkit.from_url(url, output_pdf)
                 print(f"PDF saved as {output_pdf}")
