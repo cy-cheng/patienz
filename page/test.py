@@ -3,13 +3,10 @@ from model.patient import create_patient_model
 from util.search import search_and_export_to_pdf 
 import page.dialog as dialog
 import json
+import time 
 
 # Configure instruction file paths
 PATIENT_INSTRUCTION = "instruction_file/patient_instruction.txt"
-
-# Initialize models in session state
-if "patient_model" not in st.session_state and "problem" in st.session_state:
-    create_patient_model(PATIENT_INSTRUCTION, st.session_state.problem)
 
 # sidebar 
 with st.sidebar:
@@ -48,6 +45,9 @@ with column[1]:
                         pass
 
     update_chat_history()
+
+    if "patient_model" not in st.session_state and "problem" in st.session_state:
+        create_patient_model(PATIENT_INSTRUCTION, st.session_state.problem)
 
     input_container = st.container()
     with input_container:
@@ -96,3 +96,4 @@ with column[3]:
             st.write(f"性別：{data['基本資訊']['性別']}")
             st.write(f"身高：{data['基本資訊']['身高']}")
             st.write(f"體重：{data['基本資訊']['體重']}")
+

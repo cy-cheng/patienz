@@ -1,7 +1,7 @@
 import streamlit as st 
 
 # with emoji titles
-@st.dialog("歡迎 🎉")
+@st.dialog("歡迎 👋")
 def welcome():
     st.write("歡迎使用本系統")
     st.write("您可以在左邊的選單選取不同的功能")

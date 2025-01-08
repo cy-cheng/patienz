@@ -12,12 +12,19 @@ avatar_map = {
     "grader": "🏫"
 }
 
-column = st.columns([1, 10, 2])
+column = st.columns([1, 20, 2])
 
 with column[1]:
     st.header("評分結果")
+
+    tab = st.tabs([ f"分項 {chr(65+i)}" for i in range(5)])
     output_container = st.container()
     chat_area = output_container.empty()
+
+    for i in range(5):
+        with tab[i]:
+            st.subheader(f"分項 {chr(65+i)}")
+
 
     if "grading_messages" not in st.session_state:
         st.session_state.grading_messages = []
@@ -93,9 +100,9 @@ def processGradingResult(_input, ctrl): # call after .text
     
     grades += "<tr>\n"
     grades += f"{open_str}第{ctrl+1}類評分項目</th>\n"
-    grades += f"{open_str}配分</th>\n"
-    grades += f"{open_str}得分</th>\n"
     grades += f"{open_str}回饋</th>\n"
+    grades += f"{open_str}得分</th>\n"
+    grades += f"{open_str}配分</th>\n"
     grades += "</tr>\n"
     
     full_score = 0
@@ -107,9 +114,9 @@ def processGradingResult(_input, ctrl): # call after .text
 
         grades += "<tr>\n"
         grades += f"{open_str}{data['item']}</th>\n"
-        grades += f"{open_str}{data['full_score']}</th>\n"
-        grades += f"{open_str}{data['real_score']}</th>\n"
         grades += f"{open_str}{data['feedback']}</th>\n"
+        grades += f"{open_str}{data['real_score']}</th>\n"
+        grades += f"{open_str}{data['full_score']}</th>\n"
         grades += "</tr>\n"
 
     grades += "<tr>\n"
