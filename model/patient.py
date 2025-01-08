@@ -1,5 +1,7 @@
 import os
 import google.generativeai as genai
+from util.search import search_and_export_to_pdf
+import streamlit as st
 
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
@@ -15,10 +17,24 @@ def create_patient_model(patient_instruction_path: str, problem: str):
         "response_mime_type": "text/plain",
     }
 
-    model = genai.GenerativeModel(
+    st.session_state.patient_model = genai.GenerativeModel(
         model_name="gemini-1.5-flash",
         generation_config=generation_config,
         system_instruction=f"{patient_instruction}{problem}",
     )
-    return model
 
+    keyword = st.session_state.data["Problem"]["疾病"]
+    search_and_export_to_pdf(f"{keyword} 症狀", "tmp/symptom.pdf")
+
+    st.session_state.patient = st.session_state.patient_model.start_chat(
+        history=[
+            {
+                "role": "user",
+                "parts": [
+                   genai.upload_file("tmp/symptom.pdf", mime_type="application/pdf"),
+                   "請參照這份文件回答以下的問診。"
+                ]
+            }
+        ],
+    )
+    

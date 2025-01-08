@@ -1,2 +1,4 @@
 streamlit 
 google-generativeai
+googlesearch-python
+pdfkit

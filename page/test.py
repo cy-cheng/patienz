@@ -1,5 +1,6 @@
 import streamlit as st
 from model.patient import create_patient_model
+from util.search import search_and_export_to_pdf 
 import page.dialog as dialog
 import json
 
@@ -8,9 +9,7 @@ PATIENT_INSTRUCTION = "instruction_file/patient_instruction.txt"
 
 # Initialize models in session state
 if "patient_model" not in st.session_state and "problem" in st.session_state:
-    patient_model = create_patient_model(PATIENT_INSTRUCTION, st.session_state.problem)
-    st.session_state.patient_model = patient_model
-    st.session_state.patient = st.session_state.patient_model.start_chat()
+    create_patient_model(PATIENT_INSTRUCTION, st.session_state.problem)
 
 # sidebar 
 with st.sidebar:

@@ -132,8 +132,10 @@ if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messa
     
     # Process chat history and some info
     chat_history = "\n".join([f"{msg['role']}：{msg['content']}" for msg in st.session_state.diagnostic_messages])
-    chat_history += f"\n以下是實習醫師的診斷結果：{st.session_state.diagnosis}"
-    chat_history += f"\n以下是實習醫師的判斷處置：{st.session_state.treatment}"
+    chat_history += f"\n特別注意：**以下是實習醫師的診斷結果：{st.session_state.diagnosis}**"
+    chat_history += f"\n特別注意：**以下是實習醫師的判斷處置：{st.session_state.treatment}**"
+
+    print(chat_history)
     
     test_answer_json = st.session_state.data
     test_answer = f'正確病症：{test_answer_json["Problem"]["疾病"]}'
@@ -153,7 +155,7 @@ if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messa
             grader_responses.append(getGradingResult(grader_models[i],answer_for_grader+"以下是問診記錄：\n"+chat_history+"\n請針對此份問診給出客觀的評分"))
         
         grading_results.append(processGradingResult(grader_responses[i].text, i))
-    
+
     # Merge grading results
     grading_result = "<table style=\"width:100%; border-collapse: collapse;\">\n"
 
@@ -162,7 +164,7 @@ if "diagnostic_ended" in st.session_state and len(st.session_state.grading_messa
     grading_result += "</table>\n"
     grading_result += f"<p style='margin-top: 20px;'>得分率：{round(gotten_scores/total_scores*1000)/10}%。</p>\n"
 
-    print(grading_result)
+    # print(grading_result)
 
     st.session_state.grading_messages.append({"role": "grader", "content": grading_result})
     update_chat_history()
