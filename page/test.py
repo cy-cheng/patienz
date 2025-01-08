@@ -13,7 +13,7 @@ with st.sidebar:
     st.header("筆記區")
     st.text_area("在此輸入您看診時的記錄，不計分", height=350)
 
-column = st.columns([2, 8, 1, 3])
+column = st.columns([1, 10, 1, 4])
 
 with column[1]:
     st.header("對話區")
@@ -49,22 +49,20 @@ with column[1]:
     if "patient_model" not in st.session_state and "problem" in st.session_state:
         create_patient_model(PATIENT_INSTRUCTION, st.session_state.problem)
 
-    input_container = st.container()
-    with input_container:
-        if prompt := st.chat_input("輸入您對病人的話", key="user_input"):
-            if "patient" not in st.session_state:
-                dialog.no_config()
+    if prompt := st.chat_input("輸入您對病人的話", key="user_input"):
+        if "patient" not in st.session_state:
+            dialog.no_config()
 
-            elif "diagnostic_ended" in st.session_state:
-                dialog.diagnostic_ended()
+        elif "diagnostic_ended" in st.session_state:
+            dialog.diagnostic_ended()
 
-            else:
-                st.session_state.diagnostic_messages.append({"role": "doctor", "content": prompt})
-                update_chat_history()
+        else:
+            st.session_state.diagnostic_messages.append({"role": "doctor", "content": prompt})
+            update_chat_history()
 
-                response = st.session_state.patient.send_message(f"醫生：{prompt}")
-                st.session_state.diagnostic_messages.append({"role": "patient", "content": response.text})
-                update_chat_history()
+            response = st.session_state.patient.send_message(f"醫生：{prompt}")
+            st.session_state.diagnostic_messages.append({"role": "patient", "content": response.text})
+            update_chat_history()
 
     sub_column = st.columns([1, 1])
     with sub_column[0]:
@@ -76,7 +74,7 @@ with column[1]:
 # Add a confirm answer button outside the input container
     button_container = st.container()
     with button_container:
-        if st.button("完成問診"):
+        if st.button("完成問診", use_container_width=True):
             if st.session_state.diagnosis != "" and st.session_state.treatment != "":
                 print(st.session_state.diagnosis)
                 print(st.session_state.treatment)
@@ -87,7 +85,7 @@ with column[1]:
 
 with column[3]:
     st.header("病人資料")
-    data_container = st.container(height=350)
+    data_container = st.container(border=True)
     if "data" in st.session_state:
         data = st.session_state.data
         with data_container:
@@ -96,4 +94,5 @@ with column[3]:
             st.write(f"性別：{data['基本資訊']['性別']}")
             st.write(f"身高：{data['基本資訊']['身高']}")
             st.write(f"體重：{data['基本資訊']['體重']}")
+            st.write(f"生日：{data['基本資訊']['生日']}")
 

@@ -3,11 +3,12 @@ import asyncio
 import pandas as pd
 from model.grader import create_grader_model
 from model.advisor import create_advisor_model
+import page.dialog as dialog
 import datetime
 import json
 
 INSTRUCTION_FOLDER = "instruction_file/"
-AVATAR_MAP = {"doctor": "⚕️", "patient": "😥", "advisor": "🏫"}
+AVATAR_MAP = {"student": "⚕️", "patient": "😥", "advisor": "🏫"}
 
 # Async helper for running grading models in parallel
 async def get_grading_result_async(current_model, messages_for_grading):
@@ -30,13 +31,6 @@ def process_grading_result(input_json):
         })
 
     df = pd.DataFrame(rows)
-    category_score = {
-        "項目": "類別總分",
-        "回饋": "",
-        "得分": df["得分"].sum(),
-        "配分": df["配分"].sum(),
-    }
-    df = pd.concat([df, pd.DataFrame([category_score])], ignore_index=True)
     return df, df["配分"].sum(), df["得分"].sum()
 
 def render_html_table(df):
@@ -60,17 +54,6 @@ if "advice_messages" not in st.session_state:
     st.session_state.advice_messages = []
 if "grade_ended" not in st.session_state:
     st.session_state.grade_ended = False
-
-output_container = st.container()
-chat_area = output_container.empty()
-
-# Update chat history
-def update_chat_history():
-    chat_area.empty()
-    with chat_area.container(height=350):
-        for msg in st.session_state.advice_messages:
-            with st.chat_message(msg["role"], avatar=AVATAR_MAP[msg["role"]]):
-                st.markdown(msg["content"])
 
 # Layout
 st.header("評分結果")
@@ -105,27 +88,46 @@ if "diagnostic_ended" in st.session_state and "advisor" not in st.session_state:
         total_scores += full_score
         gotten_scores += real_score
 
-        with tabs[i]:
-            st.subheader(f"評分結果")
-            with st.expander("", expanded=True, height=400):
-                st.markdown(render_html_table(df), unsafe_allow_html=True)
-
-    score_percentage = round(gotten_scores / total_scores * 100, 1)
-    st.session_state.advice_messages.append(f"你的得分率是：{score_percentage}%")
-    update_chat_history()
+    st.session_state.score_percentage = round(gotten_scores / total_scores * 100, 1)
+    st.session_state.advice_messages = [{"role": "advisor", "content": f"你的得分率是：{st.session_state.score_percentage}%"}]
 
     create_advisor_model(f"{INSTRUCTION_FOLDER}advisor_instruction.txt")
 
+if st.session_state.grade_ended:
+    for i, response in enumerate(st.session_state.grading_responses):
+        df, full_score, real_score = process_grading_result(response)
+
+        with tabs[i]:
+            st.subheader(f"細項評分")
+            with st.expander(f"本領域獲得分數：（{real_score}/{full_score}）", expanded=True):
+                with st.container(height=350):
+                    st.markdown(render_html_table(df), unsafe_allow_html=True)
+
+st.subheader("建議詢問")
+
+output_container = st.container()
+chat_area = output_container.empty()
+
+# Update chat history
+def update_chat_history():
+    chat_area.empty()
+    with chat_area.container(height=350):
+        for msg in st.session_state.advice_messages:
+            print(msg)
+            with st.chat_message(msg["role"], avatar=AVATAR_MAP[msg["role"]]):
+                st.markdown(msg["content"])
+
+
+update_chat_history()
 
 # Input form
-with st.container():
-    if prompt := st.chat_input("輸入您對評分的問題"):
-        st.session_state.grading_messages.append({"role": "doctor", "content": prompt})
-        update_chat_history()
+if prompt := st.chat_input("輸入您對評分的問題"):
+    st.session_state.advice_messages.append({"role": "student", "content": prompt})
+    update_chat_history()
 
-        response = st.session_state.grader.send_message(f"學生：{prompt}")
-        st.session_state.grading_messages.append({"role": "grader", "content": response.text})
-        update_chat_history()
+    response = st.session_state.advisor.send_message(f"學生：{prompt}")
+    st.session_state.advice_messages.append({"role": "advisor", "content": response.text})
+    update_chat_history()
 
 subcolumns = st.columns(2)
 
@@ -133,11 +135,14 @@ with subcolumns[0]:
     # End grading button
     if st.button("結束評分", use_container_width=True):
         st.session_state.grade_ended = True
+        dialog.refresh()
 
 with subcolumns[1]:
     # Save grading data
     if st.button("儲存本次病患設定", use_container_width=True):
         data = st.session_state.data
-        file_name = f"{datetime.datetime.now().strftime('%Y%m%d')} - {data['基本資訊']['姓名']} - {data['Problem']['疾病']}.json"
+        file_name = f"{datetime.datetime.now().strftime('%Y%m%d')} - {data['基本資訊']['姓名']} - {data['Problem']['疾病']} - {st.session_state.score_percentage}%.json"
         with open(f"data/problem_set/{file_name}", "w") as f:
             f.write(st.session_state.problem)
+
+        dialog.config_saved(file_name)

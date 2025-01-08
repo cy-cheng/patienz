@@ -4,6 +4,7 @@ import page.dialog as dialog
 import os
 import random
 import json
+import datetime
 
 PROBLEM_SETTER_INSTRUCTION = "instruction_file/problem_setter_instruction.txt"
 
@@ -44,7 +45,7 @@ with major_column[1]:
         problem_set = os.listdir("data/problem_set/")
         problem = st.selectbox("過去練習記錄", problem_set, index=None)
 
-    if st.button("確定"):
+    if st.button("確認設定並開始看診", use_container_width=True):
         if "problem" in st.session_state:
             dialog.has_config()
             pass
@@ -73,13 +74,11 @@ with major_column[1]:
 
 # Initialize models in session state
 if "problem_setter_model" not in st.session_state:
-    problem_setter_model = create_problem_setter_model(PROBLEM_SETTER_INSTRUCTION)
-    st.session_state.problem_setter_model = problem_setter_model
-    st.session_state.problem_setter = st.session_state.problem_setter_model.start_chat()
+    create_problem_setter_model(PROBLEM_SETTER_INSTRUCTION)
 
 if "user_config" in st.session_state and "problem" not in st.session_state:
     config = "\n".join([f"{key}: {value}" for key, value in st.session_state.user_config.items()])
-    st.session_state.problem = st.session_state.problem_setter.send_message("請利用以下資訊幫我出題：\n" + config).text
+    st.session_state.problem = st.session_state.problem_setter.send_message(f"請利用以下資訊幫我出題：\n今日日期：{datetime.datetime.now().strftime('%Y/%m/%d')}\n{config}" + config).text
     st.session_state.data = json.loads(st.session_state.problem) 
 
     print(st.session_state.problem)

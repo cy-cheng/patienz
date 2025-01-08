@@ -13,5 +13,5 @@ page = st.navigation(pages)
 page.run()
 
 if "first_entry" not in st.session_state:
-    st.session_state.first_entry = True
+    st.session_state.first_entry = False
     dialog.welcome()

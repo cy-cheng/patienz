@@ -6,6 +6,7 @@ $ pip install google.ai.generativelanguage
 
 import os
 import google.generativeai as genai
+import streamlit as st
 from google.ai.generativelanguage_v1beta.types import content
 
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
@@ -24,7 +25,7 @@ generation_config = {
       "基本資訊": content.Schema(
         type = content.Type.OBJECT,
         enum = [],
-        required = ["姓名", "年齡", "身高", "體重", "性別", "職業"],
+        required = ["姓名", "年齡", "身高", "體重", "性別", "職業", "生日"],
         properties = {
           "姓名": content.Schema(
             type = content.Type.STRING,
@@ -39,6 +40,9 @@ generation_config = {
             type = content.Type.NUMBER,
           ),
           "性別": content.Schema(
+            type = content.Type.STRING,
+          ),
+          "生日": content.Schema(
             type = content.Type.STRING,
           ),
           "職業": content.Schema(
@@ -117,11 +121,11 @@ def create_problem_setter_model(problem_instruction_path: str):
     with open(problem_instruction_path, 'r', encoding='utf-8') as file:
         problem_setter_instruction = file.read()
 
-    model = genai.GenerativeModel(
+    st.session_state.problem_setter_model = genai.GenerativeModel(
         model_name="gemini-2.0-flash-exp",
         generation_config=generation_config,
         system_instruction=problem_setter_instruction,
     )
 
-    return model
+    st.session_state.problem_setter = st.session_state.problem_setter_model.start_chat()
 
