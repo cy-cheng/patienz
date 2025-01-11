@@ -20,7 +20,7 @@ generation_config = {
   "response_schema": content.Schema(
     type = content.Type.OBJECT,
     enum = [],
-    required = ["基本資訊", "PHM", "FH", "SH", "Problem"],
+    required = ["基本資訊", "MH", "FH", "SH", "Problem"],
     properties = {
       "基本資訊": content.Schema(
         type = content.Type.OBJECT,
@@ -50,15 +50,21 @@ generation_config = {
           ),
         },
       ),
-      "PHM": content.Schema(
+      "MH": content.Schema(
         type = content.Type.OBJECT,
         enum = [],
-        required = ["既往疾病", "過敏史"],
+        required = ["既往疾病", "過敏史", "藥物史", "目前病史"],
         properties = {
           "既往疾病": content.Schema(
             type = content.Type.STRING,
           ),
+          "目前病史": content.Schema(
+            type = content.Type.STRING,
+          ),
           "過敏史": content.Schema(
+            type = content.Type.STRING,
+          ),
+          "藥物史": content.Schema(
             type = content.Type.STRING,
           ),
         },
@@ -95,7 +101,7 @@ generation_config = {
       "Problem": content.Schema(
         type = content.Type.OBJECT,
         enum = [],
-        required = ["疾病", "排除可能疾病之診斷", "確認正確疾病之診斷", "治療方法"],
+        required = ["疾病", "排除可能疾病之診斷", "確認正確疾病之診斷", "處置方式"],
         properties = {
           "疾病": content.Schema(
             type = content.Type.STRING,
@@ -106,7 +112,7 @@ generation_config = {
           "確認正確疾病之診斷": content.Schema(
             type = content.Type.STRING,
           ),
-          "治療方法": content.Schema(
+          "處置方式": content.Schema(
             type = content.Type.STRING,
           ),
         },

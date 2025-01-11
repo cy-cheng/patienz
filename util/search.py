@@ -2,6 +2,7 @@ import requests
 from googlesearch import search
 import pdfkit
 import os
+import concurrent.futures
 
 def search_and_export_to_pdf(query, output_pdf):
     """
@@ -22,16 +23,28 @@ def search_and_export_to_pdf(query, output_pdf):
 
         for url in search_results:
             try:
-                response = requests.get(url)
+                response = requests.get(url, timeout=5)
 
                 if response.status_code != 200:
                     print(f"Failed to access URL: {url}")
                     continue
 
                 print(f"Exporting {url} to {output_pdf}...")
-                pdfkit.from_url(url, output_pdf)
-                print(f"PDF saved as {output_pdf}")
-                break
+                with concurrent.futures.ThreadPoolExecutor() as executor:
+                    future = executor.submit(pdfkit.from_url, url, output_pdf)
+                    try:
+                        future.result(timeout=5)
+                        print(f"PDF saved as {output_pdf}")
+                        break
+                    except concurrent.futures.TimeoutError:
+                        print(f"Timeout occurred during PDF generation for URL: {url}")
+                        continue
+                    except Exception as e:
+                        print(f"An error occurred during PDF generation: {e}")
+                        continue
+            except requests.exceptions.Timeout:
+                print(f"Timeout occurred for URL: {url}")
+                continue
             except Exception as e:
                 print(f"An error occurred: {e}")
                 continue
@@ -45,4 +58,3 @@ if __name__ == "__main__":
     query = "Python programming language"
     output_pdf = "output.pdf"
     search_and_export_to_pdf(query, output_pdf)
-

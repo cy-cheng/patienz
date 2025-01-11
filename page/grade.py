@@ -93,7 +93,7 @@ if "diagnostic_ended" in st.session_state and "advisor" not in st.session_state:
 
     create_advisor_model(f"{INSTRUCTION_FOLDER}advisor_instruction.txt")
 
-if st.session_state.grade_ended:
+if "advisor" in st.session_state:
     for i, response in enumerate(st.session_state.grading_responses):
         df, full_score, real_score = process_grading_result(response)
 

@@ -90,9 +90,9 @@ with column[3]:
         data = st.session_state.data
         with data_container:
             st.write(f"姓名：{data['基本資訊']['姓名']}")
-            st.write(f"年齡：{data['基本資訊']['年齡']}")
-            st.write(f"性別：{data['基本資訊']['性別']}")
-            st.write(f"身高：{data['基本資訊']['身高']}")
-            st.write(f"體重：{data['基本資訊']['體重']}")
             st.write(f"生日：{data['基本資訊']['生日']}")
+            # st.write(f"年齡：{data['基本資訊']['年齡']}")
+            st.write(f"性別：{data['基本資訊']['性別']}")
+            st.write(f"身高：{data['基本資訊']['身高']} cm")
+            st.write(f"體重：{data['基本資訊']['體重']} kg")
 
