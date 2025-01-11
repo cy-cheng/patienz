@@ -10,22 +10,10 @@ def welcome():
         st.switch_page("page/config.py")
 
 @st.dialog("錯誤 ❌")
-def has_config():
-    st.write("您已經完成設定了")
+def error(e, dest):
+    st.write(e)
     if st.button("確認"):
-        st.switch_page("page/test.py")
-
-@st.dialog("錯誤 ❌")
-def no_config():
-    st.write("您尚未完成設定")
-    if st.button("確認"):
-        st.switch_page("page/config.py")
-
-@st.dialog("錯誤 ❌")
-def diagnostic_ended():
-    st.write("您已經完成問診了")
-    if st.button("確認"):
-        st.switch_page("page/grade.py")
+        st.switch_page(f"page/{dest}.py")
 
 @st.dialog("存檔成功 ✅")
 def config_saved(file_name: str):

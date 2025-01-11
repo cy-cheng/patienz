@@ -1,6 +1,6 @@
 import streamlit as st 
 from model.problem_setter import create_problem_setter_model
-import page.dialog as dialog
+import util.dialog as dialog
 import os
 import random
 import json
@@ -21,15 +21,15 @@ major_column = st.columns([2, 8, 2])
 with major_column[1]:
     st.header("病患資訊設定")
     
-    st.session_state.config_type = st.radio("選擇設定方式", ["輸入參數", "模板題", "題目存檔"])
+    st.session_state.config_type = st.radio("選擇設定方式", ["輸入參數", "模板題", "題目存檔"], horizontal=True)
 
     if st.session_state.config_type == "輸入參數":
-        minor_column_1 = st.columns([1, 1])
+        minor_column_1 = st.columns([10, 1, 10])
         with minor_column_1[0]:
             config["年齡"] = st.slider("年齡（隨機區間）", 0, 100, (0, 100))
 
-        with minor_column_1[1]:
-            config["性別"] = st.radio("性別", ["隨機", "男", "女"])
+        with minor_column_1[2]:
+            config["性別"] = st.radio("性別", ["隨機", "男", "女"], horizontal=True)
 
         field_options = ["心臟科", "神經科", "骨科", "內科", "外科", "婦產科", "小兒科", "眼科", "耳鼻喉科", "皮膚科", "泌尿科"]
 # make a selct with a random option
@@ -47,7 +47,7 @@ with major_column[1]:
 
     if st.button("確認設定並開始看診", use_container_width=True):
         if "problem" in st.session_state:
-            dialog.has_config()
+            dialog.error("請先完成目前的題目", "test")
             pass
         elif st.session_state.config_type == "輸入參數":
             config["年齡"] = random.randint(config["年齡"][0], config["年齡"][1])

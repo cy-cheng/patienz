@@ -1,5 +1,5 @@
 import streamlit as st 
-import page.dialog as dialog
+import util.dialog as dialog
 
 st.set_page_config(layout="wide")
 
