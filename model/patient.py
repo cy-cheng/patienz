@@ -8,7 +8,7 @@ genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 def create_patient_model(patient_instruction_path: str, problem: str):
     with st.spinner("正在搜尋病症特徵..."):
         keyword = st.session_state.data["Problem"]["疾病"]
-        search_and_export_to_pdf(f"{keyword} 症狀", "tmp/symptom.pdf")
+        search_and_export_to_pdf(f"{keyword} 維基百科", "tmp/symptom.pdf")
 
     with st.spinner("正在建立病人模型..."): 
         with open(patient_instruction_path, 'r', encoding='utf-8') as file:

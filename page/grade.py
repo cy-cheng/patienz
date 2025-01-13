@@ -3,12 +3,14 @@ import asyncio
 import pandas as pd
 from model.grader import create_grader_model
 from model.advisor import create_advisor_model
-import page.dialog as dialog
+import util.dialog as dialog
 import datetime
 import json
 
 INSTRUCTION_FOLDER = "instruction_file/"
 AVATAR_MAP = {"student": "⚕️", "patient": "😥", "advisor": "🏫"}
+
+ss = st.session_state
 
 # Async helper for running grading models in parallel
 async def get_grading_result_async(current_model, messages_for_grading):
@@ -50,10 +52,10 @@ def render_html_table(df):
     return html_table
 
 # Initialize Streamlit session state
-if "advice_messages" not in st.session_state:
-    st.session_state.advice_messages = []
-if "grade_ended" not in st.session_state:
-    st.session_state.grade_ended = False
+if "advice_messages" not in ss:
+    ss.advice_messages = []
+if "grade_ended" not in ss:
+    ss.grade_ended = False
 
 # Layout
 st.header("評分結果")
@@ -61,14 +63,14 @@ tabs = st.tabs(["病況詢問", "病史詢問", "溝通技巧與感情支持", "
 
 
 # Run grading models in parallel
-if "diagnostic_ended" in st.session_state and "advisor" not in st.session_state:
+if "diagnostic_ended" in ss and "advisor" not in ss:
     grader_models = [create_grader_model(f"{INSTRUCTION_FOLDER}grader_inst_{chr(65+i)}.txt") for i in range(5)]
 
-    chat_history = "\n".join([f"{msg['role']}：{msg['content']}" for msg in st.session_state.diagnostic_messages])
-    chat_history += f"\n特別注意：**以下是實習醫師的診斷結果：{st.session_state.diagnosis}**"
-    chat_history += f"\n特別注意：**以下是實習醫師的判斷處置：{st.session_state.treatment}**"
+    chat_history = "\n".join([f"{msg['role']}：{msg['content']}" for msg in ss.diagnostic_messages])
+    chat_history += f"\n特別注意：**以下是實習醫師的診斷結果：{ss.diagnosis}**"
+    chat_history += f"\n特別注意：**以下是實習醫師的判斷處置：{ss.treatment}**"
 
-    answer_for_grader = f"以下JSON記錄的為正確診斷與病人資訊：\n{st.session_state.data}\n"
+    answer_for_grader = f"以下JSON記錄的為正確診斷與病人資訊：\n{ss.data}\n"
     messages = [chat_history if i <= 2 else answer_for_grader + chat_history for i in range(5)]
 
     # Run models asynchronously
@@ -77,24 +79,24 @@ if "diagnostic_ended" in st.session_state and "advisor" not in st.session_state:
         return await asyncio.gather(*tasks)
 
     with st.spinner("評分中..."):
-        st.session_state.grading_responses = asyncio.run(run_models())
+        ss.grading_responses = asyncio.run(run_models())
 
 
     total_scores = 0
     gotten_scores = 0
 
-    for i, response in enumerate(st.session_state.grading_responses):
+    for i, response in enumerate(ss.grading_responses):
         df, full_score, real_score = process_grading_result(response)
         total_scores += full_score
         gotten_scores += real_score
 
-    st.session_state.score_percentage = round(gotten_scores / total_scores * 100, 1)
-    st.session_state.advice_messages = [{"role": "advisor", "content": f"你的得分率是：{st.session_state.score_percentage}%"}]
+    ss.score_percentage = round(gotten_scores / total_scores * 100, 1)
+    ss.advice_messages = [{"role": "advisor", "content": f"你的得分率是：{ss.score_percentage}%"}]
 
     create_advisor_model(f"{INSTRUCTION_FOLDER}advisor_instruction.txt")
 
-if "advisor" in st.session_state:
-    for i, response in enumerate(st.session_state.grading_responses):
+if "advisor" in ss:
+    for i, response in enumerate(ss.grading_responses):
         df, full_score, real_score = process_grading_result(response)
 
         with tabs[i]:
@@ -112,7 +114,7 @@ chat_area = output_container.empty()
 def update_chat_history():
     chat_area.empty()
     with chat_area.container(height=350):
-        for msg in st.session_state.advice_messages:
+        for msg in ss.advice_messages:
             print(msg)
             with st.chat_message(msg["role"], avatar=AVATAR_MAP[msg["role"]]):
                 st.markdown(msg["content"])
@@ -122,11 +124,11 @@ update_chat_history()
 
 # Input form
 if prompt := st.chat_input("輸入您對評分的問題"):
-    st.session_state.advice_messages.append({"role": "student", "content": prompt})
+    ss.advice_messages.append({"role": "student", "content": prompt})
     update_chat_history()
 
-    response = st.session_state.advisor.send_message(f"學生：{prompt}")
-    st.session_state.advice_messages.append({"role": "advisor", "content": response.text})
+    response = ss.advisor.send_message(f"學生：{prompt}")
+    ss.advice_messages.append({"role": "advisor", "content": response.text})
     update_chat_history()
 
 subcolumns = st.columns(2)
@@ -134,15 +136,15 @@ subcolumns = st.columns(2)
 with subcolumns[0]:
     # End grading button
     if st.button("結束評分", use_container_width=True):
-        st.session_state.grade_ended = True
+        ss.grade_ended = True
         dialog.refresh()
 
 with subcolumns[1]:
     # Save grading data
     if st.button("儲存本次病患設定", use_container_width=True):
-        data = st.session_state.data
-        file_name = f"{datetime.datetime.now().strftime('%Y%m%d')} - {data['基本資訊']['姓名']} - {data['Problem']['疾病']} - {st.session_state.score_percentage}%.json"
+        data = ss.data
+        file_name = f"{datetime.datetime.now().strftime('%Y%m%d')} - {data['基本資訊']['姓名']} - {data['Problem']['疾病']} - {ss.score_percentage}%.json"
         with open(f"data/problem_set/{file_name}", "w") as f:
-            f.write(st.session_state.problem)
+            f.write(ss.problem)
 
         dialog.config_saved(file_name)

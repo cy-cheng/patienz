@@ -9,7 +9,7 @@ def process_audio(audio):
             text = recognizer.recognize_google(audio_data, language='zh-TW')
             return text
         except sr.UnknownValueError:
-            dialog.error("無法辨認您的語音，請再試一次", "test")
+            dialog.error("無法辨認您的語音，請再試一次")
         except sr.RequestError:
-            dialog.error("翻譯系統無法運作", "test")
+            dialog.error("翻譯系統無法運作")
 

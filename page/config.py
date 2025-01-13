@@ -8,6 +8,8 @@ import datetime
 
 PROBLEM_SETTER_INSTRUCTION = "instruction_file/problem_setter_instruction.txt"
 
+ss = st.session_state
+
 config = {
     "年齡": None,
     "性別": None,
@@ -21,12 +23,12 @@ major_column = st.columns([2, 8, 2])
 with major_column[1]:
     st.header("病患資訊設定")
     
-    st.session_state.config_type = st.radio("選擇設定方式", ["輸入參數", "模板題", "題目存檔"], horizontal=True)
+    ss.config_type = st.radio("選擇設定方式", ["輸入參數", "模板題", "題目存檔"], horizontal=True)
 
-    if st.session_state.config_type == "輸入參數":
+    if ss.config_type == "輸入參數":
         minor_column_1 = st.columns([10, 1, 10])
         with minor_column_1[0]:
-            config["年齡"] = st.slider("年齡（隨機區間）", 0, 100, (0, 100))
+            config["年齡"] = st.slider("年齡（隨機區間）", 15, 100, (15, 100))
 
         with minor_column_1[2]:
             config["性別"] = st.radio("性別", ["隨機", "男", "女"], horizontal=True)
@@ -38,18 +40,18 @@ with major_column[1]:
 
         config["疾病"] = st.text_input("疾病", "隨機")
         config["病史"] = st.text_input("病史", "隨機")
-    elif st.session_state.config_type == "模板題":
+    elif ss.config_type == "模板題":
         problem_set = os.listdir("data/template_problem_set/")
         problem = st.selectbox("模板題選單", problem_set, index=None)
-    elif st.session_state.config_type == "題目存檔":
+    elif ss.config_type == "題目存檔":
         problem_set = os.listdir("data/problem_set/")
         problem = st.selectbox("過去練習記錄", problem_set, index=None)
 
     if st.button("確認設定並開始看診", use_container_width=True):
-        if "problem" in st.session_state:
+        if "problem" in ss:
             dialog.error("請先完成目前的題目", "test")
             pass
-        elif st.session_state.config_type == "輸入參數":
+        elif ss.config_type == "輸入參數":
             config["年齡"] = random.randint(config["年齡"][0], config["年齡"][1])
 
             if config["性別"] == "隨機":
@@ -57,29 +59,29 @@ with major_column[1]:
 
             if config["疾病科別"] == "隨機":
                 config["疾病科別"] = random.choice(field_options)
-        elif st.session_state.config_type == "模板題":
+        elif ss.config_type == "模板題":
             with open(f"data/template_problem_set/{problem}", "r") as f:
-                st.session_state.problem = f.read()
+                ss.problem = f.read()
             print(f"Problem: {problem}")
-            st.session_state.data = json.loads(st.session_state.problem) 
+            ss.data = json.loads(ss.problem) 
             st.switch_page("page/test.py")
         else:
             with open(f"data/problem_set/{problem}", "r") as f:
-                st.session_state.problem = f.read()
+                ss.problem = f.read()
             print(f"Problem: {problem}")
-            st.session_state.data = json.loads(st.session_state.problem) 
+            ss.data = json.loads(ss.problem) 
             st.switch_page("page/test.py")
 
-        st.session_state.user_config = config
+        ss.user_config = config
 
 # Initialize models in session state
-if "problem_setter_model" not in st.session_state:
+if "problem_setter_model" not in ss:
     create_problem_setter_model(PROBLEM_SETTER_INSTRUCTION)
 
-if "user_config" in st.session_state and "problem" not in st.session_state:
-    config = "\n".join([f"{key}: {value}" for key, value in st.session_state.user_config.items()])
-    st.session_state.problem = st.session_state.problem_setter.send_message(f"請利用以下資訊幫我出題：\n今日日期：{datetime.datetime.now().strftime('%Y/%m/%d')}\n{config}" + config).text
-    st.session_state.data = json.loads(st.session_state.problem) 
+if "user_config" in ss and "problem" not in ss:
+    config = "\n".join([f"{key}: {value}" for key, value in ss.user_config.items()])
+    ss.problem = ss.problem_setter.send_message(f"請利用以下資訊幫我出題：\n今日日期：{datetime.datetime.now().strftime('%Y/%m/%d')}\n{config}" + config).text
+    ss.data = json.loads(ss.problem) 
 
-    print(st.session_state.problem)
+    print(ss.problem)
     st.switch_page("page/test.py")

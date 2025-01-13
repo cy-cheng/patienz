@@ -10,10 +10,11 @@ def welcome():
         st.switch_page("page/config.py")
 
 @st.dialog("錯誤 ❌")
-def error(e, dest):
+def error(e, dest=None):
     st.write(e)
-    if st.button("確認"):
-        st.switch_page(f"page/{dest}.py")
+    if dest:
+        if st.button("確認"):
+            st.switch_page(f"page/{dest}.py")
 
 @st.dialog("存檔成功 ✅")
 def config_saved(file_name: str):
