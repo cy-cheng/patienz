@@ -15,7 +15,6 @@ config = {
     "性別": None,
     "疾病科別": None,
     "疾病": None,
-    "病史": None,
 }
 
 major_column = st.columns([2, 8, 2])
@@ -39,7 +38,6 @@ with major_column[1]:
         config["疾病科別"] = st.selectbox("疾病科別", ["隨機"] + field_options)
 
         config["疾病"] = st.text_input("疾病", "隨機")
-        config["病史"] = st.text_input("病史", "隨機")
     elif ss.config_type == "模板題":
         problem_set = os.listdir("data/template_problem_set/")
         problem = st.selectbox("模板題選單", problem_set, index=None)
@@ -80,7 +78,7 @@ if "problem_setter_model" not in ss:
 
 if "user_config" in ss and "problem" not in ss:
     config = "\n".join([f"{key}: {value}" for key, value in ss.user_config.items()])
-    ss.problem = ss.problem_setter.send_message(f"請利用以下資訊幫我出題：\n今日日期：{datetime.datetime.now().strftime('%Y/%m/%d')}\n{config}" + config).text
+    ss.problem = ss.problem_setter.send_message(f"請利用以下資訊幫我出題：\n今日日期：{datetime.datetime.now().strftime('%Y/%m/')} （年/月）\n{config}" + config).text
     ss.data = json.loads(ss.problem) 
 
     print(ss.problem)

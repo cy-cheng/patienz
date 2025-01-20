@@ -1,8 +1,10 @@
-import requests
-from googlesearch import search
-import pdfkit
+import shutil
 import os
+import requests
 import concurrent.futures
+import pdfkit
+from googlesearch import search 
+
 
 def search_and_export_to_pdf(query, output_pdf):
     """
@@ -20,6 +22,7 @@ def search_and_export_to_pdf(query, output_pdf):
     try:
         print(f"Searching for: {query}")
         search_results = list(search(query, num_results=5))
+        print(f"Found {len(search_results)} search results")
 
         for url in search_results:
             try:
@@ -52,6 +55,11 @@ def search_and_export_to_pdf(query, output_pdf):
     except Exception as e:
         print(f"An error occurred: {e}")
         return
+
+    # Check if the output PDF was created, if not, copy the error PDF
+    if not os.path.exists(output_pdf):
+        print(f"No PDF generated, copying error PDF to {output_pdf}")
+        shutil.copy("tmp/error.pdf", output_pdf)
 
 # Example usage (if running this file directly):
 if __name__ == "__main__":

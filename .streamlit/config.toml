@@ -2,7 +2,6 @@
 enableXsrfProtection = false
 enableCORS = false
 headless = true
-port = 8501
 sslCertFile = "data/SSL/certificate.pem"
 sslKeyFile = "data/SSL/private_key.pem"
 
