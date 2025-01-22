@@ -22,7 +22,7 @@ major_column = st.columns([2, 8, 2])
 with major_column[1]:
     st.header("病患資訊設定")
     
-    ss.config_type = st.radio("選擇設定方式", ["輸入參數", "模板題", "題目存檔"], horizontal=True)
+    ss.config_type = st.radio("選擇設定方式", ["模板題", "輸入參數", "題目存檔"], horizontal=True)
 
     if ss.config_type == "輸入參數":
         minor_column_1 = st.columns([10, 1, 10])
@@ -40,7 +40,7 @@ with major_column[1]:
         config["疾病"] = st.text_input("疾病", "隨機")
     elif ss.config_type == "模板題":
         problem_set = os.listdir("data/template_problem_set/")
-        problem = st.selectbox("模板題選單", problem_set, index=None)
+        problem = st.selectbox("模板題選單", sorted(problem_set), index=None)
     elif ss.config_type == "題目存檔":
         problem_set = os.listdir("data/problem_set/")
         problem = st.selectbox("過去練習記錄", problem_set, index=None)

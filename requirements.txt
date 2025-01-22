@@ -3,3 +3,4 @@ google-generativeai
 googlesearch-python
 pdfkit
 SpeechRecognition
+nest_asyncio

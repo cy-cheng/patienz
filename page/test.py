@@ -74,10 +74,12 @@ with column[1]:
 
     sub_column_2 = st.columns([1, 1])
     with sub_column_2[0]:
-        ss.diagnosis = st.text_input("診斷")
+        ss.diagnosis = st.text_input("主診斷")
     
     with sub_column_2[1]:
-        ss.treatment = st.text_input("處置")
+        ss.ddx = st.text_input("鑑別診斷")
+
+    ss.treatment = st.text_input("處置")
 
 # Add a confirm answer button outside the input container
     button_container = st.container()
