@@ -12,7 +12,9 @@ async def main():
     grader_models = sys.argv[1]
     messages = sys.argv[2]
     tasks = [get_grading_result_async(model, msg) for model, msg in zip(grader_models, messages)]
-    return await asyncio.gather(*tasks)
+    results = await asyncio.gather(*tasks)
+    print(results)
 
 if __name__ == "__main__":
     asyncio.run(main())
+    

@@ -1,13 +1,13 @@
 from pandas.core.base import NoNewAttributesMixin
 import streamlit as st
 import asyncio
-import nest_asyncio
 import pandas as pd
 from model.grader import create_grader_model
 from model.advisor import create_advisor_model
 import util.dialog as dialog
 import datetime
 import json
+import subprocess
 
 INSTRUCTION_FOLDER = "instruction_file/"
 AVATAR_MAP = {"student": "⚕️", "patient": "😥", "advisor": "🏫"}
@@ -80,15 +80,12 @@ if "diagnostic_ended" in ss and "advisor" not in ss:
         tasks = [get_grading_result_async(model, msg) for model, msg in zip(grader_models, messages)]
         return await asyncio.gather(*tasks)
     with st.spinner("評分中..."):
-        try:
-            loop = asyncio.get_event_loop()
-            ss.grading_responses = loop.run_until_complete(run_models())
-            loop.close()
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            ss.grading_responses = loop.run_until_complete(run_models())
-            loop.close()
+        process = subprocess.run(
+            ["python", "script.py", grader_models, messages],
+            capture_output=True,
+            text =True
+        )
+        ss.grading_responses = process.stdout
         # ss.grading_responses = asyncio.run(run_models())
 
     total_scores = 0
