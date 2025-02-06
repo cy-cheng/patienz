@@ -32,10 +32,9 @@ with major_column[1]:
         with minor_column_1[2]:
             config["性別"] = st.radio("性別", ["隨機", "男", "女"], horizontal=True)
 
-        field_options = ["心臟科", "神經科", "骨科", "內科", "外科", "婦產科", "小兒科", "眼科", "耳鼻喉科", "皮膚科", "泌尿科"]
-# make a selct with a random option
+        field_options = ["心臟", "胸腔", "腸胃"]
 
-        config["疾病科別"] = st.selectbox("疾病科別", ["隨機"] + field_options)
+        config["疾病領域"] = st.selectbox("疾病科別", ["隨機"] + field_options)
 
         config["疾病"] = st.text_input("疾病", "隨機")
     elif ss.config_type == "模板題":
