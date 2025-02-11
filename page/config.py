@@ -13,7 +13,7 @@ ss = st.session_state
 config = {
     "年齡": None,
     "性別": None,
-    "疾病科別": None,
+    "疾病領域": None,
     "疾病": None,
 }
 
@@ -34,7 +34,7 @@ with major_column[1]:
 
         field_options = ["心臟", "胸腔", "腸胃"]
 
-        config["疾病領域"] = st.selectbox("疾病科別", ["隨機"] + field_options)
+        config["疾病領域"] = st.selectbox("疾病領域", ["隨機"] + field_options)
 
         config["疾病"] = st.text_input("疾病", "隨機")
     elif ss.config_type == "模板題":
@@ -54,8 +54,8 @@ with major_column[1]:
             if config["性別"] == "隨機":
                 config["性別"] = random.choice(["男", "女"])
 
-            if config["疾病科別"] == "隨機":
-                config["疾病科別"] = random.choice(field_options)
+            if config["疾病領域"] == "隨機":
+                config["疾病領域"] = random.choice(field_options)
         elif ss.config_type == "模板題":
             with open(f"data/template_problem_set/{problem}", "r") as f:
                 ss.problem = f.read()
