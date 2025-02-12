@@ -4,6 +4,7 @@ import pandas as pd
 from model.grader import create_grader_model
 from model.advisor import create_advisor_model
 import util.dialog as dialog
+import util.tools as util
 import datetime
 import json
 
@@ -78,6 +79,8 @@ if "diagnostic_ended" in ss and "advisor" not in ss:
     answer_for_grader = f"以下JSON記錄的為正確診斷與病人資訊：\n{ss.data}\n"
     messages = [chat_history if i <= 2 else answer_for_grader + chat_history for i in range(5)]
 
+    util.record(ss.log, chat_history)
+
     def run_models_sync():
         with ThreadPoolExecutor(max_workers=5) as executor:
             tasks = [executor.submit(get_grading_result_sync, model, msg) for model, msg in zip(grader_models, messages)]
@@ -90,6 +93,8 @@ if "diagnostic_ended" in ss and "advisor" not in ss:
     gotten_scores = 0
 
     for i, response in enumerate(ss.grading_responses):
+        util.record(ss.log, response)
+
         df, full_score, real_score = process_grading_result(response)
         total_scores += full_score
         gotten_scores += real_score

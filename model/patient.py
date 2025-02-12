@@ -1,14 +1,16 @@
 import os
 import google.generativeai as genai
-from util.search import search_and_export_to_pdf
+from util.tools import getPDF
 import streamlit as st
 
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
+ss = st.session_state
+
 def create_patient_model(patient_instruction_path: str, problem: str):
     with st.spinner("正在搜尋病症特徵..."):
-        keyword = st.session_state.data["Problem"]["疾病"]
-        search_and_export_to_pdf(f"{keyword} 維基百科", "tmp/symptom.pdf")
+        keyword = st.session_state.data["Problem"]["englishDiseaseName"]
+        getPDF(f"{keyword} uptodate", f"tmp/ss.symptoms.pdf")
 
     with st.spinner("正在建立病人模型..."): 
         with open(patient_instruction_path, 'r', encoding='utf-8') as file:
@@ -33,7 +35,7 @@ def create_patient_model(patient_instruction_path: str, problem: str):
                 {
                     "role": "user",
                     "parts": [
-                       genai.upload_file("tmp/symptom.pdf", mime_type="application/pdf"),
+                       genai.upload_file(f"tmp/{ss.sid}_symptoms.pdf", mime_type="application/pdf"),
                        "請參照這份文件回答以下的問診。"
                     ]
                 }

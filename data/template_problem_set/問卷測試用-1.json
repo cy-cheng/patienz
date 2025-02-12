@@ -10,7 +10,8 @@
   "Problem": {
     "疾病": "急性冠心症（不穩定心絞痛）",
     "鑑別診斷": "急性心肌梗塞、慢性冠狀動脈疾病進展、主動脈瓣狹窄、胃食道逆流疾病",
-    "處置方式": "血液檢查（全血球計數、尿素及電解質、肝功能、血糖、心臟酵素）、心電圖（看ST節段變化）、胸部X光、冠狀動脈血管攝影+/-冠狀動脈成形術。緊急處置包括高流量氧氣、止痛藥（嗎啡）、即刻口服Aspirin 300 mg及Clopidogrel 300 mg，視需要使用glycoprotein 2b/3a抑制劑和肝素或fondaparinux"
+    "處置方式": "血液檢查（全血球計數、尿素及電解質、肝功能、血糖、心臟酵素）、心電圖（看ST節段變化）、胸部X光、冠狀動脈血管攝影+/-冠狀動脈成形術。緊急處置包括高流量氧氣、止痛藥（嗎啡）、即刻口服Aspirin 300 mg及Clopidogrel 300 mg，視需要使用glycoprotein 2b/3a抑制劑和肝素或fondaparinux",
+    "englishDiseaseName": "Acute coronary syndrome"
   },
   "SH": {
     "旅遊史": "無",

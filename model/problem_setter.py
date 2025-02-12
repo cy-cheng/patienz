@@ -101,7 +101,7 @@ generation_config = {
       "Problem": content.Schema(
         type = content.Type.OBJECT,
         enum = [],
-        required = ["疾病", "排除可能疾病之診斷", "確認正確疾病之診斷", "處置方式"],
+        required = ["疾病", "排除可能疾病之診斷", "確認正確疾病之診斷", "處置方式", "englishDiseaseName"],
         properties = {
           "疾病": content.Schema(
             type = content.Type.STRING,
@@ -113,6 +113,9 @@ generation_config = {
             type = content.Type.STRING,
           ),
           "處置方式": content.Schema(
+            type = content.Type.STRING,
+          ),
+          "englishDiseaseName": content.Schema(
             type = content.Type.STRING,
           ),
         },

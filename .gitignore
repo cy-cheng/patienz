@@ -1,5 +1,5 @@
 venv/
 TODO.txt
 __pycache__/
-tmp/symptom.pdf
 data/SSL/
+tmp/

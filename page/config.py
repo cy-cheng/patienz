@@ -1,14 +1,22 @@
 import streamlit as st 
 from model.problem_setter import create_problem_setter_model
 import util.dialog as dialog
+import util.tools as util
 import os
 import random
 import json
 import datetime
 
+
 PROBLEM_SETTER_INSTRUCTION = "instruction_file/problem_setter_instruction.txt"
 
 ss = st.session_state
+
+if "sid" not in ss:
+    ss.sid = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    ss.log = f"data/log/{ss.sid}.txt"
+    print(f"Session ID: {ss.sid}")
+    print(f"Log file: {ss.log}")
 
 config = {
     "年齡": None,
@@ -79,6 +87,7 @@ if "user_config" in ss and "problem" not in ss:
     config = "\n".join([f"{key}: {value}" for key, value in ss.user_config.items()])
     ss.problem = ss.problem_setter.send_message(f"請利用以下資訊幫我出題：\n今日日期：{datetime.datetime.now().strftime('%Y/%m/')} （年/月）\n{config}" + config).text
     ss.data = json.loads(ss.problem) 
+    util.record(ss.log, config)
 
-    print(ss.problem)
+    util.record(ss.log, ss.problem)
     st.switch_page("page/test.py")
