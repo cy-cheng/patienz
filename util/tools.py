@@ -5,8 +5,79 @@ import concurrent.futures
 import pdfkit
 from googlesearch import search 
 
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service 
+from webdriver_manager.chrome import ChromeDriverManager
+import time
+import base64
 
 def getPDF(query, output_pdf):
+    """
+    Takes a search query, finds the first website, and exports it as a PDF.
+
+    :param query: The search query string.
+    :param output_pdf: The name of the output PDF file.
+    """
+
+    chrome_options = Options()
+    chrome_options.add_argument("--headless=new")  # Use the updated headless mode syntax
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--remote-allow-origins=*")  # Required for Chrome 124+
+
+# Disable Chrome's PDF Viewer to force download behavior (optional for CDP method)
+    chrome_options.add_experimental_option('prefs', {
+        "plugins.always_open_pdf_externally": True,
+        "download.prompt_for_download": False
+    })
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+
+    if os.path.exists(output_pdf):
+        print(f"File already exists: {output_pdf}")
+        os.remove(output_pdf)
+        print(f"Deleted {output_pdf}")
+
+    try:
+        print(f"Searching for: {query}")
+        search_results = list(search(query, num_results=1))
+        print(f"Found {len(search_results)} search results")
+
+        driver.get(search_results[0])
+        time.sleep(5)
+
+        # Configure PDF printing parameters
+        print_options = {
+            "landscape": False,
+            "displayHeaderFooter": False,
+            "printBackground": True,
+            "preferCSSPageSize": True,
+            "margin": {"top": "0.5in", "bottom": "0.5in", "left": "0.5in", "right": "0.5in"}
+        }
+
+        # Execute CDP command to generate PDF
+        result = driver.execute_cdp_cmd("Page.printToPDF", print_options)
+
+        # Decode and save the PDF
+        pdf_data = base64.b64decode(result['data'])
+        with open(output_pdf, "wb") as f:
+            f.write(pdf_data)
+
+        driver.quit()
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return
+
+    # Check if the output PDF was created, if not, copy the error PDF
+    if not os.path.exists(output_pdf):
+        print(f"No PDF generated, copying error PDF to {output_pdf}")
+        shutil.copy("tmp/error.pdf", output_pdf)
+
+
+def getPDF2(query, output_pdf):
     """
     Takes a search query, finds the first website, and exports it as a PDF.
 
@@ -76,6 +147,6 @@ def record(file, text):
 
 # Example usage (if running this file directly):
 if __name__ == "__main__":
-    query = "Python programming language"
-    output_pdf = "output.pdf"
-    getPDF(query, output_pdf)
+    query = "Uptodate diabetes"
+    output = "output"
+    getPDF(query, output)

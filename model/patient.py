@@ -10,7 +10,7 @@ ss = st.session_state
 def create_patient_model(patient_instruction_path: str, problem: str):
     with st.spinner("正在搜尋病症特徵..."):
         keyword = st.session_state.data["Problem"]["englishDiseaseName"]
-        getPDF(f"{keyword} uptodate", f"tmp/ss.symptoms.pdf")
+        getPDF(f"{keyword} uptodate clinical features", f"tmp/{ss.sid}_symptoms.pdf")
 
     with st.spinner("正在建立病人模型..."): 
         with open(patient_instruction_path, 'r', encoding='utf-8') as file:
