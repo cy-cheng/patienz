@@ -88,8 +88,8 @@ Amylase,胰澱粉酵素,28-100,U/L
 Heli-P-Ab,胃幽門螺旋桿菌,"判讀標準（Sample RLU-to-Cutoff RLU Ratio, S/CO）：Negative：< 0.9；Positive：≥ 0.9",U/mL
 hsCRP,高敏感度C-反應性蛋白,< 1 （評估感染或發炎性疾病）；Recommended Cardiac risk assessment categories：Low < 0.1；Average 0.1~0.3；High > 0.3,mg/dL
 D-dimer,D-雙聚體,< 0.56,mg/L
-Blood gas artery,動脈血氣分析,pH（7.350–7.450）；pCO2（32.0–48.0 mmHg）；pO2（83.0–108.0 mmHg）；SO2（94.0–98.0%）；HCO3-（21.0–28.0 mmol/L）；Base excess（-2.0 - +3.0 mmol/L）
-Blood gas vein,靜脈血氣分析,pH（7.320–7.430）；pCO2（38.0–54.0 mmHg）；pO2（23.0–48.0 mmHg）；SO2（60.0–85.0%）；HCO3-（22.0–29.0 mmol/L）；Base excess（-2.0 - +3.0 mmol/L）
+,,,
+,,,
 尿液一般檢驗,,,
 Specific Gravity (Dipstick),比重（尿液試紙）,1.003-1.035,
 Color-Appearance,外觀,"Clear, yellow",
@@ -128,3 +128,19 @@ Abdominal CT,腹部 CT,,
 Electrocardiography,心電圖,,
 RIDT,流感快篩,,
 COVID-19,COVID 快篩,,
+,,,
+動脈血氣分析,,,
+pH,,7.350~7.450,
+pCO2,,32.0~48.0,mmHg
+pO2,,83.0~108.0,mmHg
+SO2,,94.0~98.0,%
+HCO3-,,21.0~28.0,mmol/L
+Base excess,,-2.0~3.0,mmol/L
+,,,
+靜脈血氣分析,,,
+pH,,7.320~7.430,
+pCO2,,38.0~54.0,mmHg
+pO2,,23.0~48.0,mmHg
+SO2,,60.0~85.0,%
+HCO3-,,22.0~29.0,mmol/L
+Base excess,,-2.0~3.0,mmol/L

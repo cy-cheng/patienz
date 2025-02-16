@@ -12,6 +12,13 @@ EXAMINER_INSTRUCTION_VAL = "instruction_file/examiner_instruction_val.txt"
 
 ss = st.session_state
 
+if "note" not in ss:
+    ss.note = ""
+
+with st.sidebar:
+    st.header("筆記區")
+    ss.note = st.text_area("在此輸入您看診時的記錄，不計分", height=350, value=ss.note)
+
 def process_examination_result(full_items, result_json):
     examination_result = json.loads(result_json)
 
@@ -56,9 +63,9 @@ def process_examination_result(full_items, result_json):
 
     return html_table
 
-major_column = st.columns([1, 8, 1])
+column = st.columns([1, 10, 1, 4])
 
-with major_column[1]:
+with column[1]:
     selection_container = st.container()
     button_container = st.container() 
     result_container = st.container()
@@ -101,23 +108,37 @@ with major_column[1]:
                     st.markdown(res, unsafe_allow_html=True)
 
     with button_container: 
+        st.container(height=50, border=False)
         if st.button("開始檢查", use_container_width=True):
             full_items = [full_options[item] for item in item_names] 
 
             print(full_items)
 
             if category != "實驗室檢查" and examination != "快篩":
-                create_text_examiner_model(EXAMINER_INSTRUCTION_TXT, ss.problem)
+                create_text_examiner_model(EXAMINER_INSTRUCTION_TXT, ss.problem, ", ".join([item[0] for item in full_items]))
                 with st.spinner("進行檢查中..."):
                     ss.examination_result.append(("、".join([item[1] for item in full_items]), ss.examiner.send_message(f"Please list out the anomalies base on only the examination of the following test: {full_items}").text))
 
             else:
 
-                create_value_examiner_model(EXAMINER_INSTRUCTION_VAL, ss.problem)
+                create_value_examiner_model(EXAMINER_INSTRUCTION_VAL, ss.problem, ", ".join([item[0] for item in full_items]))
                 with st.spinner("進行檢查中..."):
                     ss.examination_result.append((examination, process_examination_result(full_items, ss.examiner.send_message(f"{full_items}").text)))
 
             st.rerun()
 
     render_result()
+
+with column[3]:
+    st.header("病人資料")
+    data_container = st.container(border=True)
+    if "data" in ss:
+        data = ss.data
+        with data_container:
+            st.write(f"姓名：{data['基本資訊']['姓名']}")
+            st.write(f"生日：{data['基本資訊']['生日']}")
+            # st.write(f"年齡：{data['基本資訊']['年齡']}")
+            st.write(f"性別：{data['基本資訊']['性別']}")
+            st.write(f"身高：{data['基本資訊']['身高']} cm")
+            st.write(f"體重：{data['基本資訊']['體重']} kg")
 
