@@ -1,7 +1,5 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service 
-from webdriver_manager.chrome import ChromeDriverManager
 import time
 import base64
 
@@ -10,7 +8,7 @@ chrome_options.add_argument("--headless=new")  # Use the updated headless mode s
 chrome_options.add_argument("--disable-gpu")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--remote-allow-origins=*")  # Required for Chrome 124+
+chrome_options.add_argument("--remote-allow-origins=*")  # Required for Chrome 124+ :cite[4]
 
 # Disable Chrome's PDF Viewer to force download behavior (optional for CDP method)
 chrome_options.add_experimental_option('prefs', {
@@ -18,12 +16,12 @@ chrome_options.add_experimental_option('prefs', {
     "download.prompt_for_download": False
 })
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+driver = webdriver.Chrome(options=chrome_options)
 driver.get("https://www.uptodate.com/contents/seasonal-influenza-in-adults-clinical-manifestations-and-diagnosis")  # Replace with your target URL
 
 time.sleep(5)
 
-# Configure PDF printing parameters
+# Configure PDF printing parameters :cite[4]:cite[5]
 print_options = {
     "landscape": False,
     "displayHeaderFooter": False,

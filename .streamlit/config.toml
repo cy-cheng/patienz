@@ -1,7 +1,7 @@
-[server]
-enableXsrfProtection = false
-enableCORS = false
-headless = true
-sslCertFile = "data/SSL/certificate.pem"
-sslKeyFile = "data/SSL/private_key.pem"
+# [server]
+# enableXsrfProtection = false
+# enableCORS = false
+# headless = true
+# sslCertFile = "data/SSL/certificate.pem"
+# sslKeyFile = "data/SSL/private_key.pem"
 

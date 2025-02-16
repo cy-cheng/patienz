@@ -11,9 +11,13 @@ PATIENT_INSTRUCTION = "instruction_file/patient_instruction.txt"
 ss = st.session_state
 
 # sidebar 
+
+if "note" not in ss:
+    ss.note = ""
+
 with st.sidebar:
     st.header("筆記區")
-    st.text_area("在此輸入您看診時的記錄，不計分", height=350)
+    ss.note = st.text_area("在此輸入您看診時的記錄，不計分", height=350, value=ss.note)
 
 column = st.columns([1, 10, 1, 4])
 

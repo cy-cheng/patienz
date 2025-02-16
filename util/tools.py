@@ -33,7 +33,7 @@ def getPDF(query, output_pdf):
         "download.prompt_for_download": False
     })
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options) #, service=Service(ChromeDriverManager().install()))
 
     if os.path.exists(output_pdf):
         print(f"File already exists: {output_pdf}")

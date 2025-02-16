@@ -3,52 +3,112 @@ from model.examiner import create_examiner_model
 import util.dialog as dialog
 import util.tools as util
 import csv
+import pandas as pd
 import json
 
 EXAMINER_INSTRUCTION = "instruction_file/examiner_instruction.txt"
 
 ss = st.session_state
 
-major_column = st.columns([2, 8, 2])
+def process_examination_result(full_items, result_json):
+    examination_result = json.loads(result_json)
+
+    print(examination_result)
+
+    full_items = {item[0]: {
+        "chinese_name": item[1],
+        "reference_value": item[2],
+        "unit": item[3],
+    } for item in full_items}
+
+    rows = []
+
+    if examination_result["description_type_item"] != "string":
+       return examination_result["description_type_item"]
+
+    for data in examination_result['value_type_item']:
+        try:
+            rows.append({
+                "檢驗項目": data['englishName'],
+                "中文名稱": full_items[data['englishName']]['chinese_name'],
+                "參考值": full_items[data['englishName']]['reference_value'],
+                "檢測值": data['value'],
+                "單位": full_items[data['englishName']]['unit'],
+            })
+        except Exception as e:
+            print(f"Error: {e}")
+
+    df = pd.DataFrame(rows)
+    left_align = lambda x: f"<div style='text-align: left;'>{x}</div>"
+    cent_align = lambda x: f"<div style='text-align: center;'>{x}</div>"
+
+    if df.empty:
+        return "發生錯誤，請重新檢查。"
+
+    html_table = df.to_html(
+        index=False,
+        escape=False,
+        classes="dataframe table",
+        table_id="examination-results",
+        col_space="4em",
+        formatters=[left_align, left_align, cent_align, cent_align, cent_align],
+        justify="center",
+    )
+
+    return html_table
+
+major_column = st.columns([1, 8, 1])
 
 with major_column[1]:
-    st.header("選擇檢查領域")
+    selection_container = st.container()
+    button_container = st.container() 
+    result_container = st.container()
 
-    with open("data/examination_choice.json", "r", encoding="utf-8") as f:
-        examination_choice = json.load(f)
+    with selection_container:
+        st.header("檢查選擇")
 
-    category = st.radio("檢查領域", list(examination_choice.keys()))
+        with open("examination_file/examination_choice.json", "r", encoding="utf-8") as f:
+            examination_choice = json.load(f)
 
-    if category != None:
+        category = st.radio("檢查領域", examination_choice.keys(), horizontal=True)
 
-        examination = st.header("選擇檢查項目", list(examination_choice[category].keys()))
+        if category != None:
 
-        if examination != None:
-            l, r = examination_choice[category][examination].l, examination_choice[category][examination].r
+            examination = st.radio("檢查項目", examination_choice[category].keys(), horizontal=True)
 
-            with open("data/examination.csv", "r", encoding="utf-8") as f:
-                reader = csv.reader(f)
-                data = [row for row in reader]
-                data = data[l:r]
+            if examination != None:
+                l, r = examination_choice[category][examination]['l'], examination_choice[category][examination]['r']
 
-            item = st.multiselect("選擇檢查細項", data)
+                with open("examination_file/examination.csv", "r", encoding="utf-8") as f:
+                    sheet = list(csv.reader(f))
+                    display_options = [f"{row[1]} {row[0]}" for row in sheet][l:r]
+                    full_options = {f"{row[1]} {row[0]}": row for row in sheet}
+                    
+                # st.write(full_options)
+                # st.write(display_options)
 
-            st.write(f"已選擇：{item}")
+                item_names = st.multiselect("檢查細項", display_options)
+        
+    if "examination_result" not in ss:
+        ss.examination_result = []
 
+    def render_result():
+        with result_container:
+            if ss.examination_result != []: st.header("檢查結果")
+        
+            with st.container(border=True):
+                for name, res in ss.examination_result:
+                    st.header(name)
+                    st.markdown(res, unsafe_allow_html=True)
 
+    with button_container: 
+        if st.button("開始檢查", use_container_width=True):
+            full_items = [full_options[item] for item in item_names] 
 
+            create_examiner_model(EXAMINER_INSTRUCTION, ss.problem)
+            with st.spinner("進行檢查中..."):
+                ss.examination_result.append((examination, process_examination_result(full_items, ss.examiner.send_message(f"{full_items}").text)))
+            st.rerun()
 
-    
+    render_result()
 
-# Initialize models in session state
-if "examiner_model" not in ss:
-    create_examiner_model(EXAMINER_INSTRUCTION)
-
-if "user_config" in ss and "problem" not in ss:
-    config = "\n".join([f"{key}: {value}" for key, value in ss.user_config.items()])
-    ss.problem = ss.problem_setter.send_message(f"請利用以下資訊幫我出題：\n今日日期：{datetime.datetime.now().strftime('%Y/%m/')} （年/月）\n{config}" + config).text
-    ss.data = json.loads(ss.problem) 
-    util.record(ss.log, config)
-
-    util.record(ss.log, ss.problem)
-    st.switch_page("page/test.py")

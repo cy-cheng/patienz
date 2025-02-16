@@ -7,6 +7,6 @@ source venv/bin/activate
 
 echo Installing required packages...
 # Install the required packages
-pip install -q -r requirements.txt
+pip install -qr requirements.txt
 
 echo Installation complete.
