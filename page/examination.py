@@ -1,12 +1,14 @@
 import streamlit as st 
-from model.examiner import create_examiner_model
+from model.examiner import create_text_examiner_model
+from model.examiner import create_value_examiner_model
 import util.dialog as dialog
 import util.tools as util
 import csv
 import pandas as pd
 import json
 
-EXAMINER_INSTRUCTION = "instruction_file/examiner_instruction.txt"
+EXAMINER_INSTRUCTION_TXT = "instruction_file/examiner_instruction_text.txt"
+EXAMINER_INSTRUCTION_VAL = "instruction_file/examiner_instruction_val.txt"
 
 ss = st.session_state
 
@@ -22,9 +24,6 @@ def process_examination_result(full_items, result_json):
     } for item in full_items}
 
     rows = []
-
-    if examination_result["description_type_item"] != "string":
-       return examination_result["description_type_item"]
 
     for data in examination_result['value_type_item']:
         try:
@@ -50,7 +49,7 @@ def process_examination_result(full_items, result_json):
         escape=False,
         classes="dataframe table",
         table_id="examination-results",
-        col_space="4em",
+        col_space="5em",
         formatters=[left_align, left_align, cent_align, cent_align, cent_align],
         justify="center",
     )
@@ -77,7 +76,7 @@ with major_column[1]:
             examination = st.radio("檢查項目", examination_choice[category].keys(), horizontal=True)
 
             if examination != None:
-                l, r = examination_choice[category][examination]['l'], examination_choice[category][examination]['r']
+                l, r = int(examination_choice[category][examination]['l']-1), int(examination_choice[category][examination]['r']-1)
 
                 with open("examination_file/examination.csv", "r", encoding="utf-8") as f:
                     sheet = list(csv.reader(f))
@@ -98,16 +97,26 @@ with major_column[1]:
         
             with st.container(border=True):
                 for name, res in ss.examination_result:
-                    st.header(name)
+                    st.subheader(name)
                     st.markdown(res, unsafe_allow_html=True)
 
     with button_container: 
         if st.button("開始檢查", use_container_width=True):
             full_items = [full_options[item] for item in item_names] 
 
-            create_examiner_model(EXAMINER_INSTRUCTION, ss.problem)
-            with st.spinner("進行檢查中..."):
-                ss.examination_result.append((examination, process_examination_result(full_items, ss.examiner.send_message(f"{full_items}").text)))
+            print(full_items)
+
+            if category != "實驗室檢查" and examination != "快篩":
+                create_text_examiner_model(EXAMINER_INSTRUCTION_TXT, ss.problem)
+                with st.spinner("進行檢查中..."):
+                    ss.examination_result.append(("、".join([item[1] for item in full_items]), ss.examiner.send_message(f"Please list out the anomalies base on only the examination of the following test: {full_items}").text))
+
+            else:
+
+                create_value_examiner_model(EXAMINER_INSTRUCTION_VAL, ss.problem)
+                with st.spinner("進行檢查中..."):
+                    ss.examination_result.append((examination, process_examination_result(full_items, ss.examiner.send_message(f"{full_items}").text)))
+
             st.rerun()
 
     render_result()

@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/bin/zsh
 
 streamlit run home.py

@@ -73,6 +73,7 @@ with column[1]:
             update_chat_history()
 
             response = ss.patient.send_message(f"醫學生：{ss.prompt}")
+            formatted_response = response.text.replace("(", "（").replace(")", "）")
             ss.diagnostic_messages.append({"role": "patient", "content": response.text})
             update_chat_history()
 

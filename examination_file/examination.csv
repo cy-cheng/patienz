@@ -1,7 +1,130 @@
-item,chinese_name,reference_value,unit
-a,甲,(num1),(unit1)
-b,乙,(num2),(unit2)
-c,丙,(num3),(unit3)
-d,丁,(num4),(unit4)
-e,戊,(num5),(unit5)
-f,己,(num6),(unit6)
+檢驗項目,名稱,參考值（Reference value）,單位
+血液檢驗,,,
+Hb,血紅素,男：13.1~17.2；女：11.0~15.2,g/dL
+RBC,紅血球,男：4.21~5.9；女：3.78~5.25,106/uL
+WBC,白血球,3.25~9.16,103/uL
+Hct,血比容,男：39.6~51.5；女：34.8~46.3,%
+Platelet,血小板,150~378,103/uL
+MCV,平均血球容積,80.9~99.3,fL
+MCH,平均血色素蛋白（平均血球血紅素）,25.5~33.2,pg
+MCHC,平均血球血紅素濃度,31.0~34.9,g/dL
+Reticulocyte,網狀紅血球,男：1.05~2.50女：0.87~2.48,%
+Neutrophils (seg),嗜中性球（嗜中性白血球）,41.6-74.4,%
+Lymphocytes (Lym),淋巴球,18.0-48.8,%
+Monocytes (Mono),單核球,3.3-8.9,%
+Eosinophils (Eso),嗜酸性球（嗜酸性白血球）,0.3-7.9,%
+Basophils (Baso),嗜鹼性球（嗜鹼性白血球）,0.2-1.6,%
+PT,凝血酵素原時間,9.7 ~ 11.8 （INR 0.91 ~ 1.10）,sec
+aPTT,活化部分凝血激素時間,25.6-32.6,sec
+E.S.R.,紅血球沉澱速率,男：2~10；女：2~15,mm/hr
+RDW-CV,紅血球分佈寬度,11.6~15.0,%
+糖尿病檢查,,,
+Glucose (A.C.),空腹血糖,70-100,mg/dL
+Glucose (2hrs P.C.),飯後兩小時血糖,< 140,mg/dL
+HbA1c,糖化血色素,4.0-6.0,%
+insulin,胰島素,< 28.8,μU/mL
+C-peptide (0 min),胰島素連結胜肽（0 分鐘）,0.78-5.19,ng/mL
+肝功能檢查,,,
+Direct bilirubin,直接膽紅素,0.03-0.18,mg/dL
+Total bilirubin,總膽紅素,0.3-1.0,mg/dL
+AST (GOT),天門冬胺酸轉胺酶（肝功能指數）,8~31,U/L
+ALT (GPT),丙胺酸轉胺酶（肝功能指數）,0~41,U/L
+Total protein,總蛋白量,6.4-8.9,g/dL
+Albumin,白蛋白,3.5-5.7,g/dL
+Alkaline phosphatase (ALP),鹼性磷酸酶,34-104,U/L
+α-Fetoprotein,甲型胎兒蛋白,< 20,ng/mL
+γ-GT,麩胺酸轉胺酵素,9~64,U/L
+HBeAg,B型肝炎e抗原,"判讀標準（Sample RLU-to-Cutoff RLU Ratio, S/CO）：Negative：< 1.0；Positive：≥ 1.0",
+Anti-HBe,抗 B 型肝炎e抗原抗體 恢復期,"判讀標準（Sample RLU-to-Cutoff RLU Ratio, S/CO）：Negative：> 1.0；Positive：≥ 1.0。",
+Anti-HBc,抗 B 型肝炎核心抗原抗體,"判讀標準（Sample RLU-to-Cutoff RLU Ratio, S/CO）：Negative：< 1.0；Positive：≥ 1.0",
+Anti-HBs,抗 B 型肝炎表面抗原抗體 免疫力,判讀標準：Negative：< 10.00 mIU/mL；Positive：≥ 10.00 mIU/mL,
+Anti-HBc-IgM,抗 B 型肝炎核心抗原IgM抗體 急性期,"判讀標準（Sample RLU-to-Cutoff RLU Ratio, S/CO）：Negative：< 1.0；Positive：≥ 1.0",
+Anti-HAV-IgG,抗 A 型肝炎IgG抗體,"判讀標準（Sample RLU-to-Cutoff RLU Ratio, S/CO）：Negative：< 1.0；Positive：≥ 1.0",
+Anti-HAV-IgM,抗 A 型肝炎IgM抗體,"判讀標準（Sample RLU-to-Cutoff RLU Ratio, S/CO）：Negative：< 0.80；Grayzone Positive：0.80~1.20；Positive：> 1.20",
+Anti-HCV,抗 C 型肝炎抗體,"判讀標準（Sample RLU-to-Cutoff RLU Ratio, S/CO）：Negative：< 1.0；Positive：≥ 1.0",
+HBsAg (Quantitative),B 型肝炎表面抗原定量分析,判讀標準：Negative：< 0.05 IU/mL；Positve：≥ 0.05 IU/mL,
+HBsAg (Qualitative),B 型肝炎表面抗原定性分析,"判讀標準（Sample RLU-to-Cutoff RLU Ratio, S/CO）：Negative：< 1.0；Positive：≧ 1.0",
+Ammonia,阿摩尼亞（氨氣）,16-53,μmol/L
+Lactate dehydrogenase (LDH),乳酸脫氫酶,140-271,U/L
+Lactic acid (Lactate),乳酸,0.5-2.2,mmol/L
+血脂肪檢查,,,
+Triglyceride,三酸甘油酯,< 150,mg/dL
+Total Cholesterol,總膽固醇,< 200,mg/dL
+HDL-Cholesterol,高密度脂蛋白膽固醇（好的）,> 40,mg/dL
+LDL-Cholesterol,低密度脂蛋白膽固醇（壞的）,< 130,mg/dL
+腫瘤標記檢查,,,
+α-Fetoprotein (AFP),Alpha 胎兒蛋白/臨床意義：肝硬化或肝癌,< 20.0,ng/mL
+CEA (RIA)(CIA),癌胚胎抗原/臨床意義：大腸直腸胃等,< 5.0,ng/mL
+CA 125,癌症抗原 125/臨床意義：卵巢腸胃癌,< 35.0,U/mL
+CA 199 (RIA)(CIA),CA19-9 腫瘤標記 /癌症抗原 CA19-9 臨床意義：胰臟膽囊癌,< 37.0,U/mL
+PSA,前列腺特異抗原臨床意義：攝護腺特異抗原（癌）,40-49 歲 : < 2.5 ; 50-59 歲 : < 3.5 ; 60-69 歲 : < 4.5 ; 70-79 歲 : < 6.5,ng/mL
+甲狀腺功能檢查,,,
+T3 (RIA),三碘甲狀腺素,78.0–182.0,ng/dL
+T4 (RIA),四碘甲狀腺素,4.6-12.4,μg/dL
+TSH (RIA),甲狀腺刺激素,0.17-4.05,mIU/L
+Free T4 (RIA),游離甲狀腺素,0.89-1.79,ng/dL
+Free T4 (CIA),游離型甲狀腺素,0.7-1.48,ng/dL
+Anti-Thyroglobulin antibody (Anti-Tg),抗甲狀腺球蛋白抗體,血清（Serum）：< 14.4,IU/mL
+Anti-TPO,甲狀腺過氧化酶抗體,血清（Serum）：< 5.61,IU/mL
+生化檢驗,,,
+(Iron & TIBC)_Iron,血清鐵,51~209,μg/dL
+(Iron & TIBC)_TIBC,總鐵結合能力,268~593,μg/dL
+"Calcium, Ca",鈣,2.15~2.58,mmol/L
+"Chloride, Cl",氯,98~107,mmol/L
+25-OH Vitamin D,維生素 D,Severe deficiency：< 10；Mild-moderate deficiency：10-24；Optimal level：25-80；Toxic possible：> 80,ng/mL
+Ferritin,鐵蛋白,男：21.81~274.66 ; 女：4.63~204.0,ng/mL
+"Magnesium, Mg",鎂,0.78~1.11,mmol/L
+"Phosphate, P",磷,2.5~5,mg/dL
+"Potassium, K",鉀,3.5~5.1,mmol/L
+"Sodium, Na",鈉,136~145,mmol/L
+特殊血液檢查,,,
+LDH (Lactate Dehydrogenase),乳酸脫氫酶,男：135-225；女：135-214,U/L
+CK (Creatine Kinase),肌酸磷酸酶,30-223,U/L
+hs-cTnT (high-sensitivity cardiac troponin T),高敏感性心肌旋轉蛋白 T,< 14,ng/L
+hs-cTnI (high-sensitivity cardiac troponin I),高敏感性心肌旋轉蛋白 I,男：< 20；女：< 15,ng/L
+CK-MB (Creatine Kinase-MB),肌酸磷酸酶-MB 型,0.6-6.3,ng/mL
+myoglobin,肌球蛋白,< 100,mg/L
+Amylase,胰澱粉酵素,28-100,U/L
+Heli-P-Ab,胃幽門螺旋桿菌,"判讀標準（Sample RLU-to-Cutoff RLU Ratio, S/CO）：Negative：< 0.9；Positive：≥ 0.9",U/mL
+hsCRP,高敏感度C-反應性蛋白,< 1 （評估感染或發炎性疾病）；Recommended Cardiac risk assessment categories：Low < 0.1；Average 0.1~0.3；High > 0.3,mg/dL
+D-dimer,D-雙聚體,< 0.56,mg/L
+Blood gas artery,動脈血氣分析,pH（7.350–7.450）；pCO2（32.0–48.0 mmHg）；pO2（83.0–108.0 mmHg）；SO2（94.0–98.0%）；HCO3-（21.0–28.0 mmol/L）；Base excess（-2.0 - +3.0 mmol/L）
+Blood gas vein,靜脈血氣分析,pH（7.320–7.430）；pCO2（38.0–54.0 mmHg）；pO2（23.0–48.0 mmHg）；SO2（60.0–85.0%）；HCO3-（22.0–29.0 mmol/L）；Base excess（-2.0 - +3.0 mmol/L）
+尿液一般檢驗,,,
+Specific Gravity (Dipstick),比重（尿液試紙）,1.003-1.035,
+Color-Appearance,外觀,"Clear, yellow",
+PH (Dipstick),酸鹼度（尿液試紙）,5.0-8.0,
+Protein (Dipstick),尿蛋白（尿液試紙）,（-） ~ （+/-）,
+Glucose (Dipstick),尿糖（尿液試紙）,（-）,
+Bilirubin (Dipstick),膽紅素（尿液試紙）,（-）,
+Urobilinogen (Dipstick),尿膽素原（尿液試紙）,≤ 1.5,mg/dL
+RBC (Sediment),尿沉渣顯微鏡檢查－紅血球,0-2,/HPF
+WBC (Sediment),尿沉渣顯微鏡檢查－白血球,0-5,/HPF
+Epith Cell (Sediment),尿沉渣顯微鏡檢查－上皮細胞,Squamous epithelial cells 0-5,/HPF
+Casts (Sediment),尿沉渣顯微鏡檢查－圓柱體,Hyaline cast 0-2,/LPF
+Ketone (Dipstick),酮體（尿液試紙）,（-）,
+Crystal (Sediment),尿沉渣顯微鏡檢查－結晶體,None of Abnormal crystal,/HPF
+Bacteria (Sediment),尿沉渣顯微鏡檢查－細菌,（-）（Fresh）,/HPF
+Albumin (Dipstick),白蛋白（尿液試紙）,10,mg/L
+Creatinine (Dipstick),肌酸酐（尿液試紙）,N/A,
+Albumin / Creatinine Ratio (Dipstick),白蛋白對肌酸酐比值（尿液試紙）,Normal（< 30）,
+Nitrite (Dipstick),亞硝酸（尿液試紙）,（-）,
+O.B. (Dipstick),潛血（尿液試紙）,（-）,
+WBC esterase (Dipstick),白血球酯酶（尿液試紙）,（-）,
+尿液特殊檢驗,,,
+Occult Blood (Dipstick),潛血（尿液試紙）,（-）,
+Micro-albumin,微蛋白尿,< 30,mg/L
+VMA,香草扁桃酸,1.6~7.3（該數值只適用 ≥ 18歲之受檢者）,mg/24hrs
+Dopamine,多巴胺,62~444（該數值只適用 ≥ 18歲之受檢者）,μg/24hrs
+Epinephrine,腎上腺素,4~20（該數值只適用 ≥ 18歲之受檢者）,μg/24hrs
+Nor-epinephrine,正腎上腺素,23~105（該數值只適用 ≥ 18歲之受檢者）,μg/24hrs
+,,,
+Chest X-ray,胸部 X 光,,
+Abdominal X-ray,腹部 X 光,,
+Echocardiography,心臟超音波,,
+Abdominal ultrasonography,腹部超音波,,
+Chest CT,胸部 CT,,
+Abdominal CT,腹部 CT,,
+Electrocardiography,心電圖,,
+RIDT,流感快篩,,
+COVID-19,COVID 快篩,,
