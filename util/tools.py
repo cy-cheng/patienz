@@ -35,11 +35,6 @@ def getPDF(query, output_pdf):
 
     driver = webdriver.Chrome(options=chrome_options) #, service=Service(ChromeDriverManager().install()))
 
-    if os.path.exists(output_pdf):
-        print(f"File already exists: {output_pdf}")
-        os.remove(output_pdf)
-        print(f"Deleted {output_pdf}")
-
     try:
         print(f"Searching for: {query}")
         search_results = list(search(query, num_results=1))
@@ -69,7 +64,6 @@ def getPDF(query, output_pdf):
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        return
 
     # Check if the output PDF was created, if not, copy the error PDF
     if not os.path.exists(output_pdf):

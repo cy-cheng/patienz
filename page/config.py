@@ -13,7 +13,7 @@ PROBLEM_SETTER_INSTRUCTION = "instruction_file/problem_setter_instruction.txt"
 ss = st.session_state
 
 if "sid" not in ss:
-    ss.sid = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+    ss.sid = datetime.datetime.now().strftime("%Y%m%d%H%M%S") + str(random.randint(0, 999))
     ss.log = f"data/log/{ss.sid}.txt"
     print(f"Session ID: {ss.sid}")
     print(f"Log file: {ss.log}")

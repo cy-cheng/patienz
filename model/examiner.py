@@ -11,7 +11,7 @@ ss = st.session_state
 def create_value_examiner_model(examiner_instruction_path: str, problem: str, method: str):
     with st.spinner("正在搜尋病症資料..."):
         keyword = st.session_state.data["Problem"]["englishDiseaseName"]
-        getPDF(f"{keyword} {method} diagnosis", f"tmp/{ss.sid}_diagnosis.pdf")
+        getPDF(f"{keyword} {method} features", f"tmp/{ss.sid}_{method}_features.pdf")
 
     with st.spinner("正在建立檢查模型..."): 
         with open(examiner_instruction_path, 'r', encoding='utf-8') as file:
@@ -51,8 +51,8 @@ def create_value_examiner_model(examiner_instruction_path: str, problem: str, me
                 {
                     "role": "user",
                     "parts": [
-                       genai.upload_file(f"tmp/{ss.sid}_diagnosis.pdf", mime_type="application/pdf"),
-                       "please refer to this document to generate the examination report for the following: "
+                       genai.upload_file(f"tmp/{ss.sid}_{method}_features.pdf", mime_type="application/pdf"),
+                       "please refer to this document to generate the examination report for the following examination(s): "
                     ]
                 }
             ],
@@ -62,7 +62,7 @@ def create_value_examiner_model(examiner_instruction_path: str, problem: str, me
 def create_text_examiner_model(examiner_instruction_path: str, problem: str, method: str):
     with st.spinner("正在搜尋病症資料..."):
         keyword = st.session_state.data["Problem"]["englishDiseaseName"]
-        getPDF(f"{keyword} \"{method}\" diagnosis", f"tmp/{ss.sid}_diagnosis.pdf")
+        getPDF(f"{keyword} \"{method}\" features", f"tmp/{ss.sid}_{method}_features.pdf")
 
     with st.spinner("正在建立檢查模型..."): 
         with open(examiner_instruction_path, 'r', encoding='utf-8') as file:
@@ -87,7 +87,7 @@ def create_text_examiner_model(examiner_instruction_path: str, problem: str, met
                 {
                     "role": "user",
                     "parts": [
-                       genai.upload_file(f"tmp/{ss.sid}_diagnosis.pdf", mime_type="application/pdf"),
+                       genai.upload_file(f"tmp/{ss.sid}_{method}_features.pdf", mime_type="application/pdf"),
                        "please refer to this document to generate the examination report for the following: "
                     ]
                 }
