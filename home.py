@@ -1,18 +1,10 @@
 import streamlit as st 
 import util.dialog as dialog
+import util.constants as const
 
 st.set_page_config(layout="wide")
 
-pages = [
-    st.Page("page/config.py", title="病患設定", icon="🔧"),
-    st.Page("page/test.py", title="看診區", icon="🩺"),
-    st.Page("page/examination.py", title="檢查區", icon="🧪"),
-    st.Page("page/grade.py", title="評分區", icon="📝"),
-]
+pages = [st.Page(f"page/{const.section_name[i]}.py", title=f"{const.noun[i]}區", icon=const.icon[i]) for i in range(len(const.noun))]
 
 page = st.navigation(pages)
 page.run()
-
-if "first_entry" not in st.session_state:
-    st.session_state.first_entry = False
-    dialog.welcome()

@@ -1,0 +1,3 @@
+Doctor: Hello
+Patient: 我不太懂英文，請問您說中文嗎？
+

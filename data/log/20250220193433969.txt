@@ -1,0 +1,3 @@
+Doctor: hel
+Patient: 對不起，我聽不懂。
+

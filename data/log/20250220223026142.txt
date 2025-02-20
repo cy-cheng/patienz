@@ -1,0 +1,6 @@
+Doctor: 你好
+Patient: 你好
+
+Doctor: 今天怎麼了
+Patient: 我這幾天身體不太舒服。
+

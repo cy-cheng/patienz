@@ -1,0 +1,4 @@
+Doctor: fafd
+Patient: (我完全聽不懂你在說什麼。)  醫生，我胸口很痛。
+
+Doctor: 你好嗎

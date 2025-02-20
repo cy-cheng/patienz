@@ -1,0 +1,6 @@
+Doctor: sadf
+Patient: 醫生：對不起，我不太懂你的意思。可以請你用中文說明嗎？
+
+Doctor: asdf
+Patient: 醫生：不好意思，我聽不懂你在說什麼。  我哪裡不舒服嗎？
+

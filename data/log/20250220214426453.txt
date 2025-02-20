@@ -1,0 +1,6 @@
+Doctor: How are you
+Patient: 我最近胸口悶痛。
+
+Doctor: 你好嗎
+Patient: 最近胸口悶痛，有點不舒服。
+

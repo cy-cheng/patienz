@@ -1,0 +1,6 @@
+Doctor: 您好
+Patient: 您好。
+
+Doctor: 我是神
+Patient: 好的。
+

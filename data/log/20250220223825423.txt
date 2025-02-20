@@ -1,0 +1,3 @@
+Doctor: hello
+Patient: (疑惑地看著醫生) 醫生，請問有什麼事嗎？
+

@@ -1,0 +1,3 @@
+Doctor: 你好
+Patient: 你好
+

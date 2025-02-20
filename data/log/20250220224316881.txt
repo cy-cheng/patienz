@@ -1,0 +1,3 @@
+Doctor: Hello
+Patient: (假裝聽不懂) 醫生，您好。
+

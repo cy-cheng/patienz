@@ -1,0 +1,3 @@
+Doctor: hello
+Patient: 您好，醫生。
+

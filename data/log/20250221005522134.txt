@@ -1,0 +1,9 @@
+Doctor: 您好
+Patient: 您好。
+
+Doctor: 你是誰
+Patient: 我叫譚普列。
+
+Doctor: 您的身份是什麼
+Patient: 我是一位退休的零售商。
+

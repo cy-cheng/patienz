@@ -12,11 +12,19 @@ PROBLEM_SETTER_INSTRUCTION = "instruction_file/problem_setter_instruction.txt"
 
 ss = st.session_state
 
+util.init(0)
+
 if "sid" not in ss:
     ss.sid = datetime.datetime.now().strftime("%Y%m%d%H%M%S") + str(random.randint(0, 999))
     ss.log = f"data/log/{ss.sid}.txt"
     print(f"Session ID: {ss.sid}")
     print(f"Log file: {ss.log}")
+
+if "page_id" not in ss or ss.page_id != 0:
+    ss.page_id = 0
+
+if "current_progress" not in ss:
+    ss.current_progress = 0
 
 config = {
     "年齡": None,
@@ -52,7 +60,7 @@ with major_column[1]:
         problem_set = os.listdir("data/problem_set/")
         problem = st.selectbox("過去練習記錄", problem_set, index=None)
 
-    if st.button("確認設定並開始看診", use_container_width=True):
+    if st.button("確認設定並開始看診", use_container_width=True) and util.check_progress():
         if "problem" in ss:
             dialog.error("請先完成目前的題目", "test")
             pass
@@ -69,13 +77,15 @@ with major_column[1]:
                 ss.problem = f.read()
             print(f"Problem: {problem}")
             ss.data = json.loads(ss.problem) 
-            st.switch_page("page/test.py")
+
+            util.next_page()
         else:
             with open(f"data/problem_set/{problem}", "r") as f:
                 ss.problem = f.read()
             print(f"Problem: {problem}")
             ss.data = json.loads(ss.problem) 
-            st.switch_page("page/test.py")
+
+            util.next_page()
 
         ss.user_config = config
 
@@ -90,4 +100,5 @@ if "user_config" in ss and "problem" not in ss:
     util.record(ss.log, config)
 
     util.record(ss.log, ss.problem)
-    st.switch_page("page/test.py")
+
+    util.next_page()

@@ -1,4 +1,5 @@
 import streamlit as st 
+import util.constants as const
 
 # with emoji titles
 @st.dialog("歡迎 👋")
@@ -9,11 +10,26 @@ def welcome():
     if st.button("開始"):
         st.switch_page("page/config.py")
 
-@st.dialog("問診開始 🩺")
-def start_test():
-    st.write("在問診初步結束後，您可以利用檢查區進行進一步的檢查")
-    st.write("在確認您的答案後，請在下方留下您的診斷並送出")
-    st.write("在病患思考問題回答時請勿切換分頁")
+@st.dialog("進入新區域！")
+def intro(page_id: int):
+    for text in const.intro[page_id]:
+        st.write(text)
+
+@st.dialog("頁面錯誤 ❌")
+def page_error(page_id: int, current_progress: int):
+
+    if page_id < current_progress:
+        st.write(f"您已完成{const.noun[page_id]}")
+        st.write(f"請完成{const.noun[current_progress]}以繼續")
+
+        if st.button("前往"):
+            st.switch_page(f"page/{const.section_name[current_progress]}.py")
+    elif page_id > current_progress:
+        st.write(f"您尚未完成{const.noun[current_progress]}")
+        st.write(f"請先完成{const.noun[current_progress]}")
+
+        if st.button("返回"):
+            st.switch_page(f"page/{const.section_name[current_progress]}.py")
 
 @st.dialog("錯誤 ❌")
 def error(e, dest=None):
@@ -38,5 +54,4 @@ def refresh():
         for key in st.session_state:
             print(f"Deleting {key}")
             del st.session_state[key]
-        st.session_state.first_entry = False
         st.switch_page("page/config.py")

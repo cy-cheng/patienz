@@ -1,0 +1,3 @@
+Doctor: fasf
+Patient: 我不懂你在說什麼。請用中文說明你的病情。
+

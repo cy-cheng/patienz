@@ -12,12 +12,8 @@ EXAMINER_INSTRUCTION_VAL = "instruction_file/examiner_instruction_val.txt"
 
 ss = st.session_state
 
-if "note" not in ss:
-    ss.note = ""
-
-with st.sidebar:
-    st.header("筆記區")
-    ss.note = st.text_area("在此輸入您看診時的記錄，不計分", height=350, value=ss.note)
+util.init(2)
+util.note()
 
 def process_examination_result(full_items, result_json):
     examination_result = json.loads(result_json)
@@ -109,7 +105,7 @@ with column[1]:
 
     with button_container: 
         st.container(height=50, border=False)
-        if st.button("開始檢查", use_container_width=True):
+        if st.button("開始檢查", use_container_width=True) and util.check_progress():
             full_items = [full_options[item] for item in item_names] 
 
             print(full_items)
@@ -127,18 +123,11 @@ with column[1]:
 
             st.rerun()
 
+        if st.button("完成檢查", use_container_width=True) and util.check_progress():
+            util.next_page()
+
     render_result()
 
 with column[3]:
-    st.header("病人資料")
-    data_container = st.container(border=True)
-    if "data" in ss:
-        data = ss.data
-        with data_container:
-            st.write(f"姓名：{data['基本資訊']['姓名']}")
-            st.write(f"生日：{data['基本資訊']['生日']}")
-            # st.write(f"年齡：{data['基本資訊']['年齡']}")
-            st.write(f"性別：{data['基本資訊']['性別']}")
-            st.write(f"身高：{data['基本資訊']['身高']} cm")
-            st.write(f"體重：{data['基本資訊']['體重']} kg")
+    util.show_patient_profile()
 

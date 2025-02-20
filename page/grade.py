@@ -5,14 +5,16 @@ from model.grader import create_grader_model
 from model.advisor import create_advisor_model
 import util.dialog as dialog
 import util.tools as util
+import util.chat as chat
 import datetime
 import json
 
 INSTRUCTION_FOLDER = "instruction_file/"
-AVATAR_MAP = {"student": "⚕️", "patient": "😥", "advisor": "🏫"}
 
 ss = st.session_state
 
+util.init(4)
+util.note()
 
 # Helper function to run grading models
 def get_grading_result_sync(current_model, messages_for_grading):
@@ -79,8 +81,6 @@ if "diagnostic_ended" in ss and "advisor" not in ss:
     answer_for_grader = f"以下JSON記錄的為正確診斷與病人資訊：\n{ss.data}\n"
     messages = [chat_history if i <= 2 else answer_for_grader + chat_history for i in range(5)]
 
-    util.record(ss.log, chat_history)
-
     def run_models_sync():
         with ThreadPoolExecutor(max_workers=5) as executor:
             tasks = [executor.submit(get_grading_result_sync, model, msg) for model, msg in zip(grader_models, messages)]
@@ -117,37 +117,28 @@ st.subheader("建議詢問")
 output_container = st.container()
 chat_area = output_container.empty()
 
-
-# Update chat history
-def update_chat_history():
-    with chat_area.container(height=350):
-        for msg in ss.advice_messages:
-            with st.chat_message(msg["role"], avatar=AVATAR_MAP[msg["role"]]):
-                st.markdown(msg["content"])
-
-
-update_chat_history()
+chat.update(chat_area, ss.advice_messages, height=350, show_all=True)
 
 # Input form
-if prompt := st.chat_input("輸入您對評分的問題"):
-    ss.advice_messages.append({"role": "student", "content": prompt})
-    update_chat_history()
+if prompt := st.chat_input("輸入您對評分的問題") and util.check_progress():
+    chat.append(ss.advice_messages, "student", prompt)
+    chat.update(chat_area, ss.advice_messages, height=350, show_all=True)
 
     response = ss.advisor.send_message(f"學生：{prompt}")
-    ss.advice_messages.append({"role": "advisor", "content": response.text})
-    update_chat_history()
+    chat.append(ss.advice_messages, "advisor", response.text)
+    chat.update(chat_area, ss.advice_messages, height=350, show_all=True)
 
 subcolumns = st.columns(2)
 
 with subcolumns[0]:
     # End grading button
-    if st.button("結束評分", use_container_width=True):
+    if st.button("結束評分", use_container_width=True) and util.check_progress():
         ss.grade_ended = True
         dialog.refresh()
 
 with subcolumns[1]:
     # Save grading data
-    if st.button("儲存本次病患設定", use_container_width=True):
+    if st.button("儲存本次病患設定", use_container_width=True) and util.check_progress():
         data = ss.data
         file_name = f"{datetime.datetime.now().strftime('%Y%m%d')} - {data['基本資訊']['姓名']} - {data['Problem']['疾病']} - {ss.score_percentage}%.json"
         with open(f"data/problem_set/{file_name}", "w") as f:

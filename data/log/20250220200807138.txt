@@ -1,0 +1,6 @@
+Doctor: test
+Patient: 醫生，不好意思，我聽不懂你在說什麼。
+
+Doctor: test
+Doctor: test
+Doctor: test

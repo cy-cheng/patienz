@@ -1,0 +1,3 @@
+Doctor: test
+Patient: 醫生：您好，請問您哪裡不舒服？
+

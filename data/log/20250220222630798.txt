@@ -1,0 +1,6 @@
+Doctor: HEllo
+Patient: 醫生您好，請問有什麼事嗎？
+
+Doctor: 你好
+Patient: 您好，醫生。
+

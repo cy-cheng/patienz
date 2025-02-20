@@ -1,0 +1,6 @@
+Doctor: 早安
+Patient: 早安。
+
+Doctor: fjidasf
+Patient: 不好意思，我聽不懂您說什麼。
+
