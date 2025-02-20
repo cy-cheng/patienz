@@ -1,0 +1,80 @@
+***醫學生與病人的對話紀錄如下：***
+doctor：您今天哪裡不舒服
+patient：胸口悶痛。
+
+doctor：痛的部位大概是哪裡
+patient：胸口正中央。
+
+doctor：多久痛一次，一次痛多久
+patient：上週痛一次，持續約三分鐘；今天又痛一次，持續了七分鐘，現在還是有點痛。
+
+doctor：運動的時候胸口會不舒服嗎
+patient：會，以前追公車或大吃大喝後會痛。
+
+doctor：痛幾天了
+patient：今天是第二次，上週也痛過一次。
+
+doctor：可以用一隻手指比出來痛的位置嗎
+patient：（比出胸口正中央的位置）  這裡。
+
+doctor：有沒有其他地方痛
+patient：沒有。
+
+doctor：肩膀背部呢
+patient：沒有。
+
+doctor：有做甚麼事會加重或減緩嗎
+patient：上週看電視時發作，今天看雜誌時發作，噴硝酸甘油以前會減緩，但今天沒效。
+
+doctor：痛的感覺是悶痛還是刺痛，有胸口被石頭壓下來的感覺嗎
+patient：悶痛，感覺像被壓住一樣。
+
+doctor：不好意思，忘記自我介紹，我是廖醫師，請問您的名字是
+patient：譚普列。
+
+doctor：現在可以爬樓梯或跑步嗎
+patient：不行，會痛。
+
+doctor：所以痛到現在第幾小時了
+patient：大約一個小時。
+
+doctor：之前有被診斷過甚麼疾病嗎，目前用藥有甚麼
+patient：狹心症、高血壓、高膽固醇。  我吃Simvastatin、Aspirin、Bisoprolol、Lisinopril，需要時會用硝酸甘油噴霧劑。
+
+
+
+doctor：您的職業是甚麼，有運動習慣嗎，有抽菸喝酒的習慣嗎
+patient：我退休了，以前是零售商。沒有運動習慣，抽菸，每天約20根，只在社交場合喝酒。
+
+doctor：有中風或心臟病家族史嗎
+patient：我父親54歲時因心臟病過世，弟弟最近才做完心臟繞道手術。
+
+doctor：有對食物藥物過敏嗎
+patient：沒有。
+
+doctor：有住院過嗎
+patient：沒有。
+
+
+
+doctor：有開刀過嗎
+patient：沒有。
+
+doctor：現在心情還好嗎
+patient：還好，就是有點痛。
+
+doctor：會喘嗎
+patient：不會。
+
+doctor：躺下來會喘媽
+patient：不會。
+
+特別注意：**以下是實習醫師的主診斷：Unstable angina, T2DM, dyslipidemia**
+特別注意：**以下是實習醫師的鑑別診斷：STEMI, NSTEMI**
+特別注意：**以下是實習醫師的處置：Aspirin, clopidogrel, diagnostic and thheraputic PCI*****醫學生與病人的對話紀錄結束***
+
+[{"feedback": "醫生有詢問病人病程，給予滿分。", "full_score": 3, "id": 1, "item": "醫生有先請病人陳述病程", "real_score": 3}, {"feedback": "醫生有詢問病症的位置，包含胸口正中央，給予滿分。", "full_score": 1, "id": 2, "item": "醫生有詢問發生病狀的位置", "real_score": 1}, {"feedback": "醫生有詢問病症的性質，包含悶痛及被壓住的感覺，給予滿分。", "full_score": 1, "id": 3, "item": "醫生有詢問病症的性質", "real_score": 1}, {"feedback": "醫生有詢問病症的起始時間，包含上週及今天，給予滿分。", "full_score": 1, "id": 4, "item": "醫生有詢問病症的起始時間", "real_score": 1}, {"feedback": "醫生有詢問病症的持續時間，包含上週約三分鐘及今天七分鐘，給予滿分。", "full_score": 1, "id": 5, "item": "醫生有詢問病症的持續時間", "real_score": 1}, {"feedback": "醫生有詢問病症的嚴重程度，透過詢問病人能否爬樓梯及跑步，間接了解病症嚴重度，給予滿分。", "full_score": 1, "id": 6, "item": "醫生有詢問病症的嚴重程度", "real_score": 1}, {"feedback": "醫生沒有詢問相關合併症狀，例如呼吸困難等，需加強。", "full_score": 1, "id": 7, "item": "醫生有詢問發生病症的器官系統是否有相關合併症狀", "real_score": 0}, {"feedback": "醫生有詢問心臟病危險因子，包含家族史，給予滿分。", "full_score": 1, "id": 8, "item": "醫生有詢問是否相關嚴重疾病的危險因子", "real_score": 1}, {"feedback": "醫生有詢問會加重病症的因素，包含運動、看電視、看雜誌，給予滿分。", "full_score": 1, "id": 9, "item": "醫生有詢問是否有任何會加重病症的因素", "real_score": 1}, {"feedback": "醫生有詢問會緩解病症的因素，包含噴硝酸甘油，給予滿分。", "full_score": 1, "id": 11, "item": "醫生有詢問是否有任何會緩解病症的因素", "real_score": 1}, {"feedback": "醫生有詢問全身性症狀，包含喘，給予滿分。", "full_score": 1, "id": 12, "item": "醫生有詢問病人是否有伴隨全身性的症狀", "real_score": 1}, {"feedback": "醫生有詢問之前是否有類似情形，給予滿分。", "full_score": 1, "id": 13, "item": "醫生有詢問之前是否有類似情形", "real_score": 1}]
+[{"feedback": "醫生有詢問病人的內科病史，從病人敘述的狹心症、高血壓、高膽固醇可以得知。", "full_score": 1, "id": 1, "item": "醫生有詢問病人的內科病史", "real_score": 1}, {"feedback": "醫生有詢問病人的外科病史，病人回答沒有開刀過。", "full_score": 1, "id": 2, "item": "醫生有詢問病人的外科病史", "real_score": 1}, {"feedback": "醫生有詢問病人的住院史，病人回答沒有住院過。", "full_score": 1, "id": 3, "item": "醫生有詢問病人的住院史", "real_score": 1}, {"feedback": "醫生有詢問病人的用藥史，病人有敘述自己正在服用Simvastatin、Aspirin、Bisoprolol、Lisinopril，需要時會用硝酸甘油噴霧劑。", "full_score": 1, "id": 4, "item": "醫生有詢問病人的用藥史", "real_score": 1}, {"feedback": "醫生有詢問病人的過敏史，病人回答沒有食物藥物過敏。", "full_score": 1, "id": 5, "item": "醫生有詢問病人的過敏史", "real_score": 1}, {"feedback": "醫生有詢問病人的家族病史，病人敘述父親54歲時因心臟病過世，弟弟最近才做完心臟繞道手術。", "full_score": 1, "id": 6, "item": "醫生有詢問病人的家族病史", "real_score": 1}, {"feedback": "醫生有詢問病人的相關社會史，包含職業、運動習慣、抽菸喝酒習慣。", "full_score": 1, "id": 7, "item": "醫生有詢問病人的相關社會史", "real_score": 1}, {"feedback": "醫生有詢問病人生活中的風險因子，包含飲食習慣、運動習慣、抽菸、喝酒。", "full_score": 1, "id": 8, "item": "醫生有詢問病人生活中的風險因子", "real_score": 1}, {"feedback": "醫生在詢問病史的過程中，針對病人的回答例如：胸痛的部位、時間、症狀、誘發因子、緩解方式等都有做深入的追問。", "full_score": 2, "id": 9, "item": "醫生在詢問病史的過程中，能針對病人與病情可能有關的回答進行深入追問，獲取更多相關資訊", "real_score": 2}]
+[{"feedback": "醫生在問診開始時沒有自我介紹，應該在問診開始時先進行自我介紹。", "full_score": 1, "id": 1, "item": "醫生有適當的自我介紹", "real_score": 0}, {"feedback": "醫生在問診過程中才詢問病患姓名，應該在問診開始時就先詢問病患姓名，以確認病患身份。", "full_score": 3, "id": 2, "item": "醫生有確認病患姓名", "real_score": 0}, {"feedback": "醫生在問診過程中並未明確告知看診目的或原因，應該在問診開始時就明確告知看診目的或原因，讓病患了解看診流程。", "full_score": 1, "id": 3, "item": "醫生有告知看診目的或原因", "real_score": 0}, {"feedback": "醫生有使用開放式問句詢問病患為何就診，例如：\"您今天哪裡不舒服？\"", "full_score": 1, "id": 4, "item": "醫生能用開放式問句詢問病患今天為何來就診", "real_score": 1}, {"feedback": "醫生有使用封閉式問句來釐清細節，例如：\"痛的部位大概是哪裡？\"", "full_score": 1, "id": 5, "item": "醫生能視情況能利用封閉式問句來釐清細節", "real_score": 1}, {"feedback": "醫生有詢問病患對當前症狀的看法和顧慮，例如：\"痛的感覺是悶痛還是刺痛？\"", "full_score": 1, "id": 6, "item": "醫生能詢問並了解病人對當前症状的看法與顧慮", "real_score": 1}, {"feedback": "醫生在問診過程中使用了促進性詞句，例如：\"好，我了解了──請繼續說下去。\"", "full_score": 1, "id": 7, "item": "醫生能以促進的詞句或動作鼓勵病患說出他們想說的話", "real_score": 1}, {"feedback": "醫生在問診過程中適時總結病患提到的資訊，例如：\"所以您是說，您今天胸口悶痛，已經持續約一個小時了，對嗎？\"", "full_score": 1, "id": 8, "item": "醫生能適時總結病患提到的資訊，確認自己是否正確掌握資訊", "real_score": 0}, {"feedback": "醫生雖然有提到病患的病情，但解釋不夠完整，且未提及鑑別診斷及後續處置計畫。", "full_score": 2, "id": 9, "item": "醫生能正確並完整的解釋目前病情", "real_score": 0}, {"feedback": "醫生未確認病患是否理解病情，應在解釋病情後，詢問病患是否理解，並適時補充說明。", "full_score": 2, "id": 10, "item": "醫生能確認病患理解病情", "real_score": 0}, {"feedback": "醫生有提到處置計畫，但未完整解釋處置原因與風險，建議應詳細說明各項處置的原因、好處、風險及替代方案。", "full_score": 2, "id": 11, "item": "醫生能適當安排處置，並解釋處置的原因與風險", "real_score": 0}, {"feedback": "醫生未確認病患是否知曉處置內容及是否同意接受處置，應在說明處置後，詢問病患是否理解及是否同意接受處置。", "full_score": 2, "id": 12, "item": "醫生能確認病患知曉處置內容，且同意接受處置", "real_score": 0}, {"feedback": "醫生在問診過程中展現了同理心，例如：\"現在心情還好嗎？\"", "full_score": 2, "id": 13, "item": "醫生的問診過程中的語氣與用詞展現同理心，尊重病患的感受", "real_score": 2}, {"feedback": "醫生在問診過程中適時表達關心與支持，例如：\"現在心情還好嗎？\"", "full_score": 2, "id": 14, "item": "醫生在問診過程能適時表達關心與支持", "real_score": 2}, {"feedback": "醫生在問診過程中沒有提及病患隱私相關事項，應注意保護病患隱私。", "full_score": 2, "id": 15, "item": "醫生在問診過程中能注重病患的隱私", "real_score": 0}, {"feedback": "醫生的問診過程較為零散，缺乏組織性，建議醫生應學習以系統性的方式進行問診，例如使用標準問診流程。", "full_score": 1, "id": 16, "item": "醫生的病史詢問具組織性，能夠以問題為中心作研究，並總結", "real_score": 0}, {"feedback": "醫生詢問的問題大多與病情相關，但部分問題略顯重複，例如詢問病史時，重複詢問是否住院及開刀。", "full_score": 2, "id": 17, "item": "醫生未詢問與病情不相關的問題", "real_score": 1}, {"feedback": "醫生在問診過程中有些問題略顯重複，例如詢問病史時，重複詢問是否住院及開刀。", "full_score": 2, "id": 18, "item": "醫生未重複詢問相同的問題", "real_score": 1}]
+[{"feedback": "醫生提出的主診斷不穩定型心絞痛(Unstable angina)與題目設定的正確診斷急性冠狀動脈症候群(Acute coronary syndrome)相符，因為不穩定型心絞痛是急性冠狀動脈症候群的其中一種表現形式。", "full_score": 1, "id": 1, "item": "醫生能提出一個主診斷", "real_score": 1}, {"feedback": "醫生提出的鑑別診斷STEMI及NSTEMI皆為急性冠狀動脈症候群的可能性診斷，符合題目設定。", "full_score": 1, "id": 2, "item": "醫生能提出至少一個鑑別診斷", "real_score": 1}, {"feedback": "醫生提出的主診斷不穩定型心絞痛(Unstable angina)是急性冠狀動脈症候群(Acute coronary syndrome)的其中一種表現形式，與題目設定的正確診斷相符。", "full_score": 8, "id": 3, "item": "醫生提出的主診斷與題目設定的正確診斷一致", "real_score": 8}, {"feedback": "醫生提出的主診斷不穩定型心絞痛(Unstable angina)是急性冠狀動脈症候群(Acute coronary syndrome)的其中一種表現形式，與題目設定的正確診斷相符。", "full_score": 5, "id": 4, "item": "醫生提出的其中一個診斷與題目設定的正確診斷一致", "real_score": 5}, {"feedback": "醫生提出的所有診斷包含不穩定型心絞痛、STEMI及NSTEMI，其中不穩定型心絞痛及STEMI、NSTEMI都與題目設定的正確診斷及鑑別診斷重疊。", "full_score": 3, "id": 5, "item": "醫生提出的所有診斷與題目設定的所有診斷中有至少一個相同的診斷", "real_score": 3}, {"feedback": "醫生提出的所有診斷包含不穩定型心絞痛、STEMI及NSTEMI，其中不穩定型心絞痛及STEMI、NSTEMI都與題目設定的正確診斷及鑑別診斷重疊。", "full_score": 3, "id": 6, "item": "醫生提出的所有診斷與題目設定的所有診斷中有至少二個相同的診斷", "real_score": 3}, {"feedback": "醫生提出的主診斷不穩定型心絞痛(Unstable angina)主要影響心臟，與題目設定的正確診斷急性冠狀動脈症候群(Acute coronary syndrome)影響的器官一致。", "full_score": 2, "id": 7, "item": "醫生提出的主診斷所影響的人體器官與題目設定的正確診斷所影響的人體器官一致", "real_score": 2}, {"feedback": "醫生提出的主診斷不穩定型心絞痛(Unstable angina)屬於心血管系統疾病，與題目設定的正確診斷急性冠狀動脈症候群(Acute coronary syndrome)影響的人體系統一致。", "full_score": 1, "id": 8, "item": "醫生提出的主診斷所影響的人體系統與題目設定的正確診斷所影響的人體系統一致", "real_score": 1}]
+[{"feedback": "醫生有詢問病史，包含既往病史、目前病史、藥物史、家族史等等，也有詢問病人的生活習慣，算是蠻仔細的問診。\n但是，醫生沒有提到任何處置方式，也沒有任何建議病人做進一步檢查，例如心電圖、血液檢查等，以利於診斷。\n建議醫生在問診的過程中，適時地加入一些檢查建議，以幫助診斷和治療。", "full_score": 1, "id": 1, "item": "醫生能提出至少一個處置", "real_score": 0}, {"feedback": "醫生沒有提出任何處置方式，因此無法評分。", "full_score": 5, "id": 2, "item": "醫生提出的處置包含至少一項題目建議的正確處置", "real_score": 0}, {"feedback": "醫生沒有提出任何處置方式，因此無法評分。", "full_score": 5, "id": 3, "item": "醫生提出的處置包含至少兩項題目建議的正確處置", "real_score": 0}, {"feedback": "醫生沒有提出任何處置方式，因此無法評分。", "full_score": 5, "id": 4, "item": "醫生提出的處置包含所有題目建議的正確處置", "real_score": 0}, {"feedback": "醫生沒有提出任何處置方式，因此無法評分。", "full_score": 8, "id": 5, "item": "醫生提出的處置中有至少一項有助於確認題目設定的正確診斷", "real_score": 0}, {"feedback": "醫生沒有提出任何處置方式，因此無法評分。", "full_score": 5, "id": 6, "item": "醫生提出的處置中有至少一項有助於排除題目建議的可能診斷", "real_score": 0}, {"feedback": "醫生沒有提出任何處置方式，因此無法評分。", "full_score": 3, "id": 7, "item": "醫生提出的每一個處置都有助於診斷上的判斷", "real_score": 0}]
