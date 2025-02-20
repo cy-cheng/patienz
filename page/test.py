@@ -10,6 +10,12 @@ import time
 PATIENT_INSTRUCTION = "instruction_file/patient_instruction.txt"
 ss = st.session_state
 
+# first test entry
+
+if "first_test_entry" not in ss and "first_entry" in ss:
+    ss.first_test_entry = False
+    dialog.start_test()
+
 # sidebar 
 
 if "note" not in ss:
@@ -69,6 +75,7 @@ with column[1]:
         elif "diagnostic_ended" in ss:
             dialog.error("本次問診已結束", "grade")
         elif ss.prompt != "":
+            ss.prompt = ss.prompt.rstrip("\n")
             ss.diagnostic_messages.append({"role": "doctor", "content": ss.prompt})
             update_chat_history()
 
@@ -77,14 +84,11 @@ with column[1]:
             ss.diagnostic_messages.append({"role": "patient", "content": formatted_response})
             update_chat_history()
 
-    sub_column_2 = st.columns([1, 1])
-    with sub_column_2[0]:
-        ss.diagnosis = st.text_input("主診斷")
+    ss.diagnosis = st.text_input("主診斷")
     
-    with sub_column_2[1]:
-        ss.ddx = st.text_input("鑑別診斷")
+    ss.ddx = st.text_input("鑑別診斷（以逗號分隔）")
 
-    ss.treatment = st.text_input("處置")
+    ss.treatment = st.text_input("處置（包含進行之檢查與治療方式，以逗號分隔）")
 
 # Add a confirm answer button outside the input container
     button_container = st.container()

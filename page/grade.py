@@ -71,9 +71,9 @@ if "diagnostic_ended" in ss and "advisor" not in ss:
     grader_models = [create_grader_model(f"{INSTRUCTION_FOLDER}grader_inst_{chr(65+i)}.txt") for i in range(5)]
     chat_history = f"***醫學生與病人的對話紀錄如下：***\n"
     chat_history += "\n".join([f"{msg['role']}：{msg['content']}" for msg in ss.diagnostic_messages])
-    chat_history += f"\n特別注意：**以下是實習醫師的診斷結果：{ss.diagnosis}**"
+    chat_history += f"\n特別注意：**以下是實習醫師的主診斷：{ss.diagnosis}**"
     chat_history += f"\n特別注意：**以下是實習醫師的鑑別診斷：{ss.ddx}**"
-    chat_history += f"\n特別注意：**以下是實習醫師的判斷處置：{ss.treatment}**"
+    chat_history += f"\n特別注意：**以下是實習醫師的處置：{ss.treatment}**"
     chat_history += f"***醫學生與病人的對話紀錄結束***\n"
 
     answer_for_grader = f"以下JSON記錄的為正確診斷與病人資訊：\n{ss.data}\n"
@@ -89,18 +89,16 @@ if "diagnostic_ended" in ss and "advisor" not in ss:
     with st.spinner("評分中..."):
         ss.grading_responses = run_models_sync()
 
-    total_scores = 0
-    gotten_scores = 0
+    total = 0
 
     for i, response in enumerate(ss.grading_responses):
         util.record(ss.log, response)
 
         df, full_score, real_score = process_grading_result(response)
-        total_scores += full_score
-        gotten_scores += real_score
+        total += real_score / full_score
 
-    ss.score_percentage = round(gotten_scores / total_scores * 100, 1)
-    ss.advice_messages = [{"role": "advisor", "content": f"你的得分率是：{ss.score_percentage}%"}]
+    ss.score_percentage = round(total * 20, 1)
+    ss.advice_messages = [{"role": "advisor", "content": f"你的平均得分率是：{ss.score_percentage}%"}]
 
     create_advisor_model(f"{INSTRUCTION_FOLDER}advisor_instruction.txt")
 
