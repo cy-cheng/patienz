@@ -1,0 +1,10 @@
+Doctor: test
+Patient: 聽不懂。
+
+Doctor: 今天怎麼了
+Patient: 我這幾天身體不太舒服。
+
+Doctor: 你好
+Patient: 您好。
+
+Doctor: 我剛剛幫你做了快篩

@@ -1,0 +1,9 @@
+Doctor: 您好
+Patient: 您好。
+
+Doctor: 今天怎麼了
+Patient: 我這幾天身體不太舒服。
+
+Doctor: 具體而言是哪裡不舒服呢？
+Patient: 喉嚨痛，然後全身痠痛，頭也痛。
+

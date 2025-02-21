@@ -1,0 +1,22 @@
+Doctor: 您好
+Patient: 您好。
+
+Doctor: 今天怎麼
+Patient: 最近胸口常常痛。
+
+Doctor: 持續多久了呢？
+Doctor: 持續多久了呢？
+Patient: 大概…  一個禮拜有了吧，最近比較頻繁。
+
+Doctor: 持續多久了呢？
+Patient: 就是最近一週比較頻繁，之前偶爾會痛，但最近幾乎每天都會痛個幾分鐘。
+
+Doctor: 持續多久了呢？
+Patient: 大概…一星期左右吧。
+
+Doctor: 還好嗎
+Patient: 還好，還好。就是胸口痛，有點不舒服。
+
+Doctor: 以前有類似問題嗎？
+Patient: 有，五年前醫生說是狹心症。
+

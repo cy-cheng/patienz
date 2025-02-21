@@ -20,23 +20,16 @@ with column[1]:
 
     if "diagnostic_messages" not in ss:
         ss.diagnostic_messages = []
-
-    if "clear_prompt" not in ss:
-        ss.clear_prompt = False 
         
     if audio := st.audio_input("語音輸入"):
-        ss.audio = audio
+        ss.audio2 = audio
         ss.prompt = process_audio(audio)
-        ss.prompt = st.text_area("請輸入您的對話內容", value=ss.prompt, key="prompt_area")
+        ss.prompt = st.text_area("請輸入您的對話內容", value=ss.prompt)
 
     chat.update(chat_area, msgs=ss.diagnostic_messages, height=200, show_all=False)
 
-    if "audio" not in ss:
-        if ss.clear_prompt:
-            ss.prompt = st.text_area("請輸入您的對話內容", value="", key="prompt_area")
-            ss.clear_prompt = False
-        else:
-            ss.prompt = st.text_area("請輸入您的對話內容", value=ss.get("prompt_area", ""), key="prompt_area")
+    if "audio2" not in ss:
+        ss.prompt = st.text_area("請輸入您的對話內容")
 
     if st.button("送出對話", use_container_width=True) and util.check_progress():
         if ss.prompt != "":
@@ -51,9 +44,6 @@ with column[1]:
             util.record(ss.log, f"Patient: {response.text}")
             chat.append(ss.diagnostic_messages, "patient", formatted_response)
             chat.update(chat_area, msgs=ss.diagnostic_messages, height=200, show_all=False)
-            
-            ss.clear_prompt = True
-            st.rerun()
 
     ss.diagnosis = st.text_input("主診斷")
     
