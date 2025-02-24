@@ -1,0 +1,10 @@
+Doctor: 跨三小
+Patient: 聽不懂。
+
+Doctor: 滾
+Patient: 聽不懂。
+
+Doctor: 滾
+Doctor: 你沒救了
+Patient: 聽不懂。
+

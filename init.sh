@@ -10,3 +10,7 @@ echo Installing required packages...
 pip install -qr requirements.txt
 
 echo Installation complete.
+
+echo Starting application...
+
+./run.sh
