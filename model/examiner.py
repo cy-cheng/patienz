@@ -7,8 +7,11 @@ import streamlit as st
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
 ss = st.session_state
+EXAMINER_INSTRUCTION_TXT = "instruction_file/examiner_instruction_text.txt"
+EXAMINER_INSTRUCTION_VAL = "instruction_file/examiner_instruction_val.txt"
 
-def create_value_examiner_model(examiner_instruction_path: str, problem: str, method: str):
+
+def create_value_examiner_model(problem: str, method: str, examiner_instruction_path=EXAMINER_INSTRUCTION_VAL):
     with st.spinner("正在搜尋病症資料..."):
         keyword = st.session_state.data["Problem"]["englishDiseaseName"]
         getPDF(f"{keyword} {method} features", f"tmp/{ss.sid}_{method[:10]}_features.pdf")
@@ -59,7 +62,7 @@ def create_value_examiner_model(examiner_instruction_path: str, problem: str, me
         )
     
 
-def create_text_examiner_model(examiner_instruction_path: str, problem: str, method: str):
+def create_text_examiner_model(problem: str, method: str, examiner_instruction_path=EXAMINER_INSTRUCTION_TXT):
     with st.spinner("正在搜尋病症資料..."):
         keyword = st.session_state.data["Problem"]["englishDiseaseName"]
         getPDF(f"{keyword} \"{method}\" features", f"tmp/{ss.sid}_{method[:10]}_features.pdf")

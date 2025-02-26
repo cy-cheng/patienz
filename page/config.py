@@ -7,24 +7,9 @@ import random
 import json
 import datetime
 
-
-PROBLEM_SETTER_INSTRUCTION = "instruction_file/problem_setter_instruction.txt"
-
 ss = st.session_state
 
 util.init(0)
-
-if "sid" not in ss:
-    ss.sid = datetime.datetime.now().strftime("%Y%m%d%H%M%S") + str(random.randint(0, 999))
-    ss.log = f"data/log/{ss.sid}.txt"
-    print(f"Session ID: {ss.sid}")
-    print(f"Log file: {ss.log}")
-
-if "page_id" not in ss or ss.page_id != 0:
-    ss.page_id = 0
-
-if "current_progress" not in ss:
-    ss.current_progress = 0
 
 config = {
     "年齡": None,
@@ -91,11 +76,13 @@ with major_column[1]:
 
 # Initialize models in session state
 if "problem_setter_model" not in ss:
-    create_problem_setter_model(PROBLEM_SETTER_INSTRUCTION)
+    create_problem_setter_model()
 
 if "user_config" in ss and "problem" not in ss:
     config = "\n".join([f"{key}: {value}" for key, value in ss.user_config.items()])
-    ss.problem = ss.problem_setter.send_message(f"請利用以下資訊幫我出題：\n今日日期：{datetime.datetime.now().strftime('%Y/%m/')} （年/月）\n{config}" + config).text
+    ss.problem = ss.problem_setter.send_message(f"請利用以下資訊幫我出題：\n今日日期：{datetime.datetime.now().strftime('%Y/%m')} （年/月）\n{config}").text
+
+    print(f"請利用以下資訊幫我出題：\n今日日期：{datetime.datetime.now().strftime('%Y/%m')} （年/月）\n{config}")
     ss.data = json.loads(ss.problem) 
     util.record(ss.log, config)
 

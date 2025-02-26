@@ -58,18 +58,13 @@ def render_html_table(df):
     return html_table
 
 
-# Initialize Streamlit session state
-if "advice_messages" not in ss:
-    ss.advice_messages = []
-if "grade_ended" not in ss:
-    ss.grade_ended = False
-
 # Layout
 st.header("評分結果")
+
 tabs = st.tabs(["病況詢問", "病史詢問", "溝通技巧與感情支持", "鑑別診斷", "疾病處置"])
 
 # Run grading models in parallel using ThreadPoolExecutor
-if "diagnostic_ended" in ss and "advisor" not in ss:
+if ss.current_progress == 4 and "advisor" not in ss:
     grader_models = [create_grader_model(f"{INSTRUCTION_FOLDER}grader_inst_{chr(65+i)}.txt") for i in range(5)]
     chat_history = f"***醫學生與病人的對話紀錄如下：***\n"
     chat_history += "\n".join([f"{msg['role']}：{msg['content']}" for msg in ss.diagnostic_messages])
@@ -98,7 +93,7 @@ if "diagnostic_ended" in ss and "advisor" not in ss:
         total += real_score / full_score
 
     ss.score_percentage = round(total * 20, 1)
-    ss.advice_messages = [{"role": "advisor", "content": f"你的平均得分率是：{ss.score_percentage}%"}]
+    ss.advice_messages = [{"role": "advisor", "content": f"你的平均得分率是：{ss.score_percentage}%"}, {"role": "advisor", "content": f"此病人的疾病是：{ss.data['Problem']['疾病']}"}, {"role": "advisor", "content": f"您應該進行的處置是：{ss.data['Problem']['處置方式']}"}]
 
     create_advisor_model(f"{INSTRUCTION_FOLDER}advisor_instruction.txt")
 
@@ -120,20 +115,19 @@ chat_area = output_container.empty()
 chat.update(chat_area, ss.advice_messages, height=350, show_all=True)
 
 # Input form
-if prompt := st.chat_input("輸入您對評分的問題") and util.check_progress():
+if (prompt := st.chat_input("輸入您對評分的問題")) and util.check_progress():
     chat.append(ss.advice_messages, "student", prompt)
-    chat.update(chat_area, ss.advice_messages, height=350, show_all=True)
+    chat.update(chat_area, msgs=ss.advice_messages, height=350, show_all=True)
 
     response = ss.advisor.send_message(f"學生：{prompt}")
     chat.append(ss.advice_messages, "advisor", response.text)
-    chat.update(chat_area, ss.advice_messages, height=350, show_all=True)
+    chat.update(chat_area, msgs=ss.advice_messages, height=350, show_all=True)
 
 subcolumns = st.columns(2)
 
 with subcolumns[0]:
     # End grading button
     if st.button("結束評分", use_container_width=True) and util.check_progress():
-        ss.grade_ended = True
         dialog.refresh()
 
 with subcolumns[1]:

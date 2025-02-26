@@ -11,6 +11,10 @@ from google.ai.generativelanguage_v1beta.types import content
 
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
+ss = st.session_state
+
+PROBLEM_SETTER_INSTRUCTION = "instruction_file/problem_setter_instruction.txt"
+
 # Create the model
 generation_config = {
   "temperature": 1,
@@ -126,15 +130,28 @@ generation_config = {
 }
 
 
-def create_problem_setter_model(problem_instruction_path: str):
+def create_problem_setter_model(problem_instruction_path=PROBLEM_SETTER_INSTRUCTION):
     with open(problem_instruction_path, 'r', encoding='utf-8') as file:
         problem_setter_instruction = file.read()
 
-    st.session_state.problem_setter_model = genai.GenerativeModel(
+    ss.problem_setter_model = genai.GenerativeModel(
         model_name="gemini-2.0-flash-exp",
         generation_config=generation_config,
         system_instruction=problem_setter_instruction,
     )
 
-    st.session_state.problem_setter = st.session_state.problem_setter_model.start_chat()
+    ss.problem_setter = ss.problem_setter_model.start_chat() # history=[
+#         {
+#             "role": "user",
+#             "parts": ["請回答以下問題，以協助醫生診斷。",]
+#         },
+#         {
+#             "role": "model",
+#             "parts": ["請提供您的基本資訊。",]
+#         },
+#         {
+#             "role": "user",
+#             "parts": [],
+#         }
+#     ])
 

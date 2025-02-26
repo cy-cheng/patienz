@@ -3,12 +3,10 @@ from model.examiner import create_text_examiner_model
 from model.examiner import create_value_examiner_model
 import util.dialog as dialog
 import util.tools as util
+import util.constants as const
 import csv
 import pandas as pd
 import json
-
-EXAMINER_INSTRUCTION_TXT = "instruction_file/examiner_instruction_text.txt"
-EXAMINER_INSTRUCTION_VAL = "instruction_file/examiner_instruction_val.txt"
 
 ss = st.session_state
 
@@ -88,12 +86,12 @@ with column[1]:
                     
                 # st.write(full_options)
                 # st.write(display_options)
-
-                item_names = st.multiselect("檢查細項", display_options)
+                
+                if examination in const.default_all:
+                    item_names = st.multiselect("檢查細項", options=display_options, default=display_options)
+                else:
+                    item_names = st.multiselect("檢查細項", display_options)
         
-    if "examination_result" not in ss:
-        ss.examination_result = []
-
     def render_result():
         with result_container:
             if ss.examination_result != []: st.header("檢查結果")
@@ -111,13 +109,13 @@ with column[1]:
             print(full_items)
 
             if category != "實驗室檢查" and examination != "快篩":
-                create_text_examiner_model(EXAMINER_INSTRUCTION_TXT, ss.problem, ", ".join([item[0] for item in full_items]))
+                create_text_examiner_model(ss.problem, ", ".join([item[0] for item in full_items]))
                 with st.spinner("進行檢查中..."):
                     ss.examination_result.append(("、".join([item[1] for item in full_items]), ss.examiner.send_message(f"Please list out the anomalies base on only the examination of the following test: {full_items}").text))
 
             else:
 
-                create_value_examiner_model(EXAMINER_INSTRUCTION_VAL, ss.problem, ", ".join([item[0] for item in full_items]))
+                create_value_examiner_model(ss.problem, ", ".join([item[0] for item in full_items]))
                 with st.spinner("進行檢查中..."):
                     ss.examination_result.append((examination, process_examination_result(full_items, ss.examiner.send_message(f"{full_items}").text)))
 
@@ -130,4 +128,8 @@ with column[1]:
 
 with column[3]:
     util.show_patient_profile()
+
+    st.subheader("其他資訊")
+    with st.container(border=True):
+        util.show_time()
 

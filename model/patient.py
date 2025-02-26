@@ -4,12 +4,13 @@ from util.tools import getPDF
 import streamlit as st
 
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+PATIENT_INSTRUCTION = "instruction_file/patient_instruction.txt"
 
 ss = st.session_state
 
-def create_patient_model(patient_instruction_path: str, problem: str):
+def create_patient_model(problem: str, patient_instruction_path=PATIENT_INSTRUCTION):
     with st.spinner("正在搜尋病症特徵..."):
-        keyword = st.session_state.data["Problem"]["englishDiseaseName"]
+        keyword = ss.data["Problem"]["englishDiseaseName"]
         getPDF(f"{keyword} uptodate clinical features", f"tmp/{ss.sid}_symptoms.pdf")
 
     with st.spinner("正在建立病人模型..."): 
@@ -24,13 +25,13 @@ def create_patient_model(patient_instruction_path: str, problem: str):
             "response_mime_type": "text/plain",
         }
 
-        st.session_state.patient_model = genai.GenerativeModel(
+        ss.patient_model = genai.GenerativeModel(
             model_name="gemini-1.5-flash",
             generation_config=generation_config,
             system_instruction=f"{patient_instruction}{problem}",
         )
 
-        st.session_state.patient = st.session_state.patient_model.start_chat(
+        ss.patient = ss.patient_model.start_chat(
             history=[
                 {
                     "role": "user",

@@ -10,6 +10,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service 
 from webdriver_manager.chrome import ChromeDriverManager
 import time
+import datetime
 import base64
 
 import streamlit as st
@@ -22,16 +23,31 @@ def next_page():
     ss.current_progress = (ss.current_progress + 1) % len(const.section_name)
     st.switch_page(f"page/{const.section_name[ss.current_progress]}.py")
 
+def init_all():
+    if "sid" not in ss:
+        ss.sid = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        ss.log = f"data/log/{ss.sid}.txt"
+        print(f"Session ID: {ss.sid}")
+        print(f"Log file: {ss.log}")
+
+        ss.page_id = 0
+        ss.current_progress = 0
+
+        ss.first_entry = [True for _ in range(len(const.section_name))]
+
+        ss.diagnostic_messages = []
+        ss.examination_result = []
+        ss.advice_messages = []
+
+        ss.start_time = [None for _ in range(len(const.section_name))]
+        ss.cur_show_all, ss.show_all = False, False
 
 def init(page_id: int):
     ss.page_id = page_id
 
-    if "current_progress" not in ss:
-        ss.current_progress = 0
-
-    if "first_entry" not in ss:
-        ss.first_entry = [True for _ in range(len(const.section_name))]
-
+    if ss.start_time[ss.page_id] is None and ss.current_progress == ss.page_id:
+        ss.start_time[ss.page_id] = time.time()
+        print(f"Start time for page {ss.page_id}: {ss.start_time[ss.page_id]}")
 
     if ss.first_entry[0] == True and ss.page_id != 0:
         st.switch_page(f"page/{const.section_name[0]}.py")
@@ -40,6 +56,30 @@ def init(page_id: int):
         ss.first_entry[ss.page_id] = False
         dialog.intro(ss.page_id)
 
+@st.fragment(run_every=1)
+def show_time():
+    for i in range(1, min(3, max(ss.page_id, ss.current_progress)) + 1):
+        if ss.current_progress < i:
+            continue
+        if ss.current_progress == i:
+            elapsed_time = int(time.time() - ss.start_time[i])
+        else: 
+            elapsed_time = int(ss.start_time[i + 1] - ss.start_time[i])
+        st.write(f"{const.noun[i]}時間：{elapsed_time // 60}:{elapsed_time % 60:02d}")
+    
+    if ss.current_progress > 0:
+        if ss.current_progress < 4:
+            elapsed_time = int(time.time() - ss.start_time[1])
+        else:
+            elapsed_time = int(ss.start_time[4] - ss.start_time[1])
+
+        st.write(f"總時間：{elapsed_time // 60}:{elapsed_time % 60:02d}")
+
+def peek_chat():
+    ss.show_all = st.checkbox("偷看對話紀錄", ss.show_all)
+    if ss.show_all != ss.cur_show_all:
+        ss.cur_show_all = ss.show_all
+        st.rerun()
 
 def note():
     if "note" not in ss:

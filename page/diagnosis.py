@@ -14,19 +14,16 @@ util.note()
 column = st.columns([1, 10, 1, 4])
 
 with column[1]:
-    st.header("對話區")
+    st.header("對話區（病情解釋）")
     output_container = st.container()
     chat_area = output_container.empty()
 
-    if "diagnostic_messages" not in ss:
-        ss.diagnostic_messages = []
-        
     if audio := st.audio_input("語音輸入"):
         ss.audio2 = audio
         ss.prompt = process_audio(audio)
         ss.prompt = st.text_area("請輸入您的對話內容", value=ss.prompt)
 
-    chat.update(chat_area, msgs=ss.diagnostic_messages, height=200, show_all=False)
+    chat.update(chat_area, msgs=ss.diagnostic_messages, height=200, show_all=ss.show_all)
 
     if "audio2" not in ss:
         ss.prompt = st.text_area("請輸入您的對話內容")
@@ -37,13 +34,13 @@ with column[1]:
             util.record(ss.log, f"Doctor: {ss.prompt}")
 
             chat.append(ss.diagnostic_messages, "doctor", ss.prompt)
-            chat.update(chat_area, msgs=ss.diagnostic_messages, height=200, show_all=False)
+            chat.update(chat_area, msgs=ss.diagnostic_messages, height=200, show_all=ss.show_all)
             
             response = ss.patient.send_message(f"醫學生：{ss.prompt}")
             formatted_response = response.text.replace("(", "（").replace(")", "）")
             util.record(ss.log, f"Patient: {response.text}")
             chat.append(ss.diagnostic_messages, "patient", formatted_response)
-            chat.update(chat_area, msgs=ss.diagnostic_messages, height=200, show_all=False)
+            chat.update(chat_area, msgs=ss.diagnostic_messages, height=200, show_all=ss.show_all)
 
     ss.diagnosis = st.text_input("主診斷")
     
@@ -66,4 +63,9 @@ with column[1]:
 
 with column[3]:
     util.show_patient_profile()
+
+    st.subheader("其他資訊")
+    with st.container(border=True):
+        util.peek_chat()
+        util.show_time()
 
