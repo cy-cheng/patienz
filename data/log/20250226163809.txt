@@ -1,0 +1,26 @@
+Doctor: 你有什麼不舒服
+Patient: 最近胸口這裡悶悶的，有點痛。
+
+Doctor: 你有什麼不舒服
+Patient: 就是胸口這裡，有點壓迫感，不舒服。
+
+Doctor: 痛多久了
+Patient: 嗯…  大概…  一個小時左右吧，之前也發生過一次，不過那次沒這麼久。
+
+Doctor: 會喘嗎
+Patient: 不會喘。
+
+Doctor: 有多痛 1-10分
+Patient: 大概…7分吧。
+
+Doctor: 胸口哪裡痛
+Patient: 正中央這裡。
+
+Doctor: 一直痛還是陣陣痛
+Patient: 剛開始比較痛，現在…比較悶，還是有點痛。
+
+Doctor: 什麼動作比較舒服嗎
+Patient: 休息比較舒服一點。
+
+
+

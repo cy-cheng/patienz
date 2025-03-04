@@ -1,0 +1,6 @@
+Doctor: a
+Patient: 醫生好，我最近身體不太舒服。
+
+Doctor: b
+Patient: 就是…全身痠痛，喉嚨也痛痛的。
+

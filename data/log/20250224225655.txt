@@ -1,0 +1,5 @@
+Doctor: a
+Patient: 醫生你好，我最近身體不太舒服。喉嚨痛、肌肉痠痛，還一直發冷。
+Doctor: why though? any idea?
+Patient: 我也不知道為什麼，就是突然這樣了。三天前開始覺得很疲倦，然後就開始喉嚨痛、肌肉痠痛和發冷。
+

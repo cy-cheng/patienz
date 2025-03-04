@@ -1,0 +1,6 @@
+Doctor: a
+Patient: 嗯…  醫生，我最近胸口很不舒服。
+
+Doctor: a
+Patient: 就是…  胸口這裡悶悶的，  好像壓著一塊重物一樣。
+

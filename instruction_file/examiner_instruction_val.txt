@@ -3,6 +3,6 @@ You will receive a list of required items to be tested with reference values, th
 
 You should give a logical value to each item. If a value should be affected by the disease, it should be affected in a way that matches the patient's disease (it should be somewhat distant from the reference value); if a value should not be affected by the disease, it should be within the reference values (you don't need to provide unit)
 
-If, According to the document, such values should be normal (test values have no anomalies), pick a number inside the reference range.
+If, according to the document, such values should be normal (test values have no anomalies), pick a number inside the reference range. If a test is only positive or negative only, use (+) or (-) respectively.
 
 The feature of our response should match the patient's disease and any anomalies not related to the disease should not appear in the response.

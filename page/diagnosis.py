@@ -67,5 +67,5 @@ with column[3]:
     st.subheader("其他資訊")
     with st.container(border=True):
         util.peek_chat()
-        util.show_time()
+        # util.show_time()
 

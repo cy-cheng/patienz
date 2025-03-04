@@ -1,0 +1,23 @@
+Doctor: a
+Patient: 醫生您好。我最近身體不太舒服。喉嚨痛，全身痠痛，還有點發冷。
+
+Doctor: a
+b
+Patient: 嗯…大概三天前開始的。  
+
+Doctor: a
+b
+c
+Patient: 昨天比較嚴重，有發燒，大概39度左右，然後頭痛，很累，咳也咳得比較厲害。
+
+Doctor: a
+b
+c
+Patient: 我有吃一些市售的退燒藥，不過效果還好。
+
+Doctor: a
+b
+c
+Patient: 今天早上咳嗽更嚴重了，還有鼻塞流鼻涕。
+
+

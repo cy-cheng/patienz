@@ -104,7 +104,8 @@ with column[1]:
     with button_container: 
         st.container(height=50, border=False)
         if st.button("開始檢查", use_container_width=True) and util.check_progress():
-            full_items = [full_options[item] for item in item_names] 
+            full_items  = [sheet[0]] 
+            full_items += [full_options[item] for item in item_names] 
 
             print(full_items)
 
@@ -129,7 +130,7 @@ with column[1]:
 with column[3]:
     util.show_patient_profile()
 
-    st.subheader("其他資訊")
-    with st.container(border=True):
-        util.show_time()
+    # st.subheader("其他資訊")
+    # with st.container(border=True):
+    #    util.show_time()
 

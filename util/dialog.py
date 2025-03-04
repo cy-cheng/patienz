@@ -22,13 +22,13 @@ def page_error(page_id: int, current_progress: int):
         st.write(f"您已完成{const.noun[page_id]}")
         st.write(f"請完成{const.noun[current_progress]}以繼續")
 
-        if st.button("前往"):
+        if st.button(f"前往{const.noun[page_id]}區"):
             st.switch_page(f"page/{const.section_name[current_progress]}.py")
     elif page_id > current_progress:
         st.write(f"您尚未完成{const.noun[current_progress]}")
         st.write(f"請先完成{const.noun[current_progress]}")
 
-        if st.button("返回"):
+        if st.button(f"返回{const.noun[current_progress]}區"):
             st.switch_page(f"page/{const.section_name[current_progress]}.py")
 
 @st.dialog("錯誤 ❌")
